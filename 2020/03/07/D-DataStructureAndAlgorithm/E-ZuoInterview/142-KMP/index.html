@@ -1,0 +1,663 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ChenXi">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="题目描述:给定两个字符串str和match，长度分别为N和M。实现一个算法，如果字符串str中含有子串match，则返回match在str中的开始位置，不含有则返回-1。 解法: KMP算法 生成match字符串的nextArr数组，这个数组的长度与match字符串的长度一样，nextArr[i]的含义是在match[i]之前的字符串match[0…i-1]中，必须以match[i-1]结尾的后缀">
+<meta property="og:type" content="article">
+<meta property="og:title" content="代码面试指南系列（一百四十二）：KMP算法">
+<meta property="og:url" content="http://example.com/2020/03/07/D-DataStructureAndAlgorithm/E-ZuoInterview/142-KMP/index.html">
+<meta property="og:site_name" content="陈曦の博客">
+<meta property="og:description" content="题目描述:给定两个字符串str和match，长度分别为N和M。实现一个算法，如果字符串str中含有子串match，则返回match在str中的开始位置，不含有则返回-1。 解法: KMP算法 生成match字符串的nextArr数组，这个数组的长度与match字符串的长度一样，nextArr[i]的含义是在match[i]之前的字符串match[0…i-1]中，必须以match[i-1]结尾的后缀">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-03-06T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-07T00:28:32.739Z">
+<meta property="article:author" content="ChenXi">
+<meta property="article:tag" content="数据结构">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>代码面试指南系列（一百四十二）：KMP算法 - 陈曦の博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>陈曦の博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="代码面试指南系列（一百四十二）：KMP算法"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2020-03-07 00:00" pubdate>
+          2020年3月7日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          27 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">代码面试指南系列（一百四十二）：KMP算法</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述:"></a>题目描述:</h3><p>给定两个字符串str和match，长度分别为N和M。实现一个算法，如果字符串str中含有子串match，则返回match在str中的开始位置，不含有则返回-1。</p>
+<h4 id="解法-KMP算法"><a href="#解法-KMP算法" class="headerlink" title="解法: KMP算法"></a>解法: KMP算法</h4><ol>
+<li>生成match字符串的nextArr数组，这个数组的长度与match字符串的长度一样，nextArr[i]的含义是在match[i]之前的字符串match[0…i-1]中，必须以match[i-1]结尾的后缀子串(不能包含match[0])与必须以match[0]开头的前缀子串(不能包含match[i-1])最大匹配长度是多少，这个长度就是nextArr[i]的值。比如：str&#x3D;”aaaaaaaaaaaaaaab”，match&#x3D;”aaaab”，nextArr[4]计算：match[4]&#x3D;’b’，所以前缀子串为”aaaa”，根据顶一个这个字符串的后缀子串和前缀子串最大匹配为”aaa”，也就是当后缀子串等于match[1..3]&#x3D;”aaa”，前缀子串等于match[0..2]&#x3D;”aaa”时，这时前缀和后缀不仅相等，而且是所有前缀和后缀的可能性中最大的匹配。</li>
+<li>假设从str[i]字符出发，匹配到j位置的字符发现和match中的字符不一致，即str[i]与match[0]一样，并且str[i..j-1]与match[0..j-i-1]一样，而str[j]!&#x3D;match[j-i]，匹配停止。因为已经有了match字符串的nextArr数组，nextArr[j-i]的值表示match[0..j-i-1]这一段字符串前缀与后缀的最长匹配。假设前缀是a区域，后缀是b区域，假设a区域的下一个字符为match[k]。那么，下一次的匹配检查不再像普通解法一样退回到str[i+1]重新开始与match[0]的匹配过程，而是直接让str[j]与match[k]进行匹配。原因：假设str[j]字符为A，match[j-i]字符为B，match[k]字符为C，在str上A字符前一个和a区域等长的区域为c。因为匹配到A和B才发生不匹配，所以c区域等于b区域，b区域又和a区域相等，所以c区域和a区域是相等的，不需要检查，直接把字符C滑到字符A的位置开始检查即可。可以直接将C滑到A字符位置的原因：因为在中间这段不用检查区域中，从任何一个字符出发都肯定匹配不出match，因为假设能匹配出match，假设d区域是不用检查区域中的一个位置，那么d区域应该和从match[0]开始的e区域匹配，即d区域和e区域一样长，且两个区域字符串相等，同时，d区域比c区域大，e区域比a区域大。同时match和str是到A和B才不相等，说明前面有一段d’区域是和d等长且相等，d’&#x3D;d&#x3D;e，这存在了一段更长的前缀后缀匹配，违反了nextArr[j-i]的定义，所以中间这段区域是不用检查区域。</li>
+<li>至此，可以知道str中的匹配位置是不会回退的，match一直向右滑动来和str匹配，直到完全匹配出match，整个过程停止。否则match滑到str最右侧过程也停止。</li>
+</ol>
+<p>如何快速得到(时间复杂度O(M))match字符串的nextArr数组：</p>
+<ol>
+<li>对于match[0]来说，在它之前没有字符，所以nextArr[0]规定为-1。对match[1]来说，在它之前有match[0]，但nextArr数组的定义要求任何子串的后缀不能包括第一个字符match[0]，所以所以match[1]之前的字符串只有长度为0的后缀字符串，nextArr[1]&#x3D;0。</li>
+<li>对于i&gt;1位置来说，在求解nextArr[i]的时候，nextArr[0…i-1]都已经求出。假设match[i]为A字符，match[i-1]为B字符，通过nextArr[i-1]的值可知B字符前的字符串的最长前缀和后缀匹配区域，设I区域为最长前缀子串区域，K为最长后缀区域，C为I区域的后一个字符，然后看C字符是否与B相等：如果C字符和B字符相等，那么A字符之前的字符串的最长前缀与后缀匹配区域就可以确定，前缀子串为I区域+C字符，后缀子串为K区域+B字符，即nextArr[i]&#x3D;nextArr[i-1]+1；如果C字符和B字符不相等，就看字符C之前的前缀和后缀匹配情况。假设字符C是第cn个字符，即match[cn]，那么nextArr[cn]就是其最长前缀和后缀匹配的长度，假设m区和n区分别是字符C之前的字符串最长匹配的后缀与前缀区域，这两个区域肯定是相等的。m’区域是k区域最右的区域且长度与m区域一样，因K区域和I区域是一样的，所以m区域和m’区域也相等，字符D为n区域后一个字符，接下来比较字符D与字符B是否相等：1.如果相等，A字符之前的字符串最长前缀与后缀匹配区域就可以确定，前缀子串为n区域+D字符，后缀区域为m’区域+B字符，即令nextArr[i]&#x3D;nextArr[cn]+1；2.如果不等，继续跳到字符D，之后的过程和跳到字符C类似，一直进行这样的跳过程，跳的每一个都会有一个新字符和B比较，只要有相等的情况，nextArr[i]的值就能确定</li>
+<li>如果向前跳到最左位置，即nextArr[0]&#x3D;-1位置，说明字符A之前的字符串不存在前缀和后缀匹配的情况，则令nextArr[0]&#x3D;0。</li>
+</ol>
+<p>时间复杂度: O(N); 辅助空间复杂度: O(N)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getNextArray</span><span class="hljs-params">(<span class="hljs-type">char</span>[] ms)</span> &#123;<br>        <span class="hljs-keyword">if</span> (ms.length == <span class="hljs-number">1</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[] &#123; -<span class="hljs-number">1</span> &#125;;<br>        &#125;<br>        <span class="hljs-type">int</span>[] next = <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[ms.length];<br>        <span class="hljs-comment">// 初始化两个起始位置</span><br>        next[<span class="hljs-number">0</span>] = -<span class="hljs-number">1</span>;<br>        next[<span class="hljs-number">1</span>] = <span class="hljs-number">0</span>;<br>        <span class="hljs-comment">// 遍历指针</span><br>        <span class="hljs-type">int</span> <span class="hljs-variable">pos</span> <span class="hljs-operator">=</span> <span class="hljs-number">2</span>;<br>        <span class="hljs-comment">// cn初始在0位置</span><br>        <span class="hljs-type">int</span> <span class="hljs-variable">cn</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">while</span> (pos &lt; next.length) &#123;<br>            <span class="hljs-comment">// 如果B字符和C字符相等</span><br>            <span class="hljs-keyword">if</span> (ms[pos - <span class="hljs-number">1</span>] == ms[cn]) &#123;<br>                next[pos++] = ++cn;<br>            &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (cn &gt; <span class="hljs-number">0</span>) &#123;<br>                cn = next[cn];<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                next[pos++] = <span class="hljs-number">0</span>;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> next;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getIndexOf</span><span class="hljs-params">(String s, String m)</span> &#123;<br>        <span class="hljs-keyword">if</span> (s == <span class="hljs-literal">null</span> || m == <span class="hljs-literal">null</span> || m.length() &lt; <span class="hljs-number">1</span> || s.length() &lt; m.length()) &#123;<br>            <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;<br>        &#125;<br>        <span class="hljs-type">char</span>[] ss = s.toCharArray();<br>        <span class="hljs-type">char</span>[] ms = m.toCharArray();<br>        <span class="hljs-type">int</span> <span class="hljs-variable">si</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">mi</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span>[] next = getNextArray(ms);<br>        <span class="hljs-keyword">while</span> (si &lt; ss.length &amp;&amp; mi &lt; ms.length) &#123;<br>            <span class="hljs-keyword">if</span> (ss[si] == ms[mi]) &#123;<br>                si++;<br>                mi++;<br>            &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (next[mid] == -<span class="hljs-number">1</span>)  &#123;<br>                si++;<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                mi = next[mi];<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> mi == ms.length ? si - mi : -<span class="hljs-number">1</span>;<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9D%A2%E8%AF%95%E6%8C%87%E5%8D%97%E7%B3%BB%E5%88%97/" class="category-chain-item">代码面试指南系列</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">#数据结构</a>
+      
+        <a href="/tags/%E7%AE%97%E6%B3%95/">#算法</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>代码面试指南系列（一百四十二）：KMP算法</div>
+      <div>http://example.com/2020/03/07/D-DataStructureAndAlgorithm/E-ZuoInterview/142-KMP/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>ChenXi</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2020年3月7日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/03/07/D-DataStructureAndAlgorithm/E-ZuoInterview/141-Manacher/" title="代码面试指南系列（一百四十一）：Manacher算法">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">代码面试指南系列（一百四十一）：Manacher算法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/03/07/D-DataStructureAndAlgorithm/E-ZuoInterview/143-HighestFloor/" title="代码面试指南系列（一百四十三）：丢棋子问题">
+                        <span class="hidden-mobile">代码面试指南系列（一百四十三）：丢棋子问题</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

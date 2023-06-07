@@ -1,0 +1,673 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ChenXi">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="题目描述:一棵二叉树原本是搜索二叉树，但是其中有两个节点调换了位置，使得这棵二叉树不再是搜索二叉树，请找到这两个错误的节点并返回。已知二叉树中所有节点的值都不一样，给定二叉树的头节点head，返回一个长度为2的二叉树节点类型的数组errs，errs[0]表示一个错误节点，errs[1]表示一个错误节点。 解法:二叉搜索树的一个重要性质是前序遍历的结果是有序的，如果某两个节点发生了交换，并且因为没有">
+<meta property="og:type" content="article">
+<meta property="og:title" content="代码面试指南系列（三十）：调整搜索二叉树中两个错误的节点">
+<meta property="og:url" content="http://example.com/2020/02/15/D-DataStructureAndAlgorithm/E-ZuoInterview/30-getTwoErrorNodes/index.html">
+<meta property="og:site_name" content="陈曦の博客">
+<meta property="og:description" content="题目描述:一棵二叉树原本是搜索二叉树，但是其中有两个节点调换了位置，使得这棵二叉树不再是搜索二叉树，请找到这两个错误的节点并返回。已知二叉树中所有节点的值都不一样，给定二叉树的头节点head，返回一个长度为2的二叉树节点类型的数组errs，errs[0]表示一个错误节点，errs[1]表示一个错误节点。 解法:二叉搜索树的一个重要性质是前序遍历的结果是有序的，如果某两个节点发生了交换，并且因为没有">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-02-14T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-07T00:28:32.743Z">
+<meta property="article:author" content="ChenXi">
+<meta property="article:tag" content="数据结构">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>代码面试指南系列（三十）：调整搜索二叉树中两个错误的节点 - 陈曦の博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>陈曦の博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="代码面试指南系列（三十）：调整搜索二叉树中两个错误的节点"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2020-02-15 00:00" pubdate>
+          2020年2月15日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          39 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">代码面试指南系列（三十）：调整搜索二叉树中两个错误的节点</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述:"></a>题目描述:</h3><p>一棵二叉树原本是搜索二叉树，但是其中有两个节点调换了位置，使得这棵二叉树不再是搜索二叉树，请找到这两个错误的节点并返回。已知二叉树中所有节点的值都不一样，给定二叉树的头节点head，返回一个长度为2的二叉树节点类型的数组errs，errs[0]表示一个错误节点，errs[1]表示一个错误节点。</p>
+<p>解法:<br>二叉搜索树的一个重要性质是前序遍历的结果是有序的，如果某两个节点发生了交换，并且因为没有重复的数字，所以必定会出现降序，找到第一次出现降序的前一个数字和第二次出现降序的后一个数字对应结点就是结果。</p>
+<p>时间复杂度: O(N)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Node</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> value;<br>    <span class="hljs-keyword">public</span> Node left;<br>    <span class="hljs-keyword">public</span> Node right;<br>    <br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">Node</span><span class="hljs-params">(<span class="hljs-type">int</span> data)</span> &#123;<br>        <span class="hljs-built_in">this</span>.value = data;<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">import</span> java.util.Stack;<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>    <span class="hljs-keyword">public</span> Node[] getTwoErrNode(Node head) &#123;<br>        Node[] errs = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Node</span>[<span class="hljs-number">2</span>];<br>        <span class="hljs-keyword">if</span> (head == <span class="hljs-literal">null</span>) &#123;<br>            <span class="hljs-keyword">return</span> errs;<br>        &#125;<br><br>        Stack&lt;Node&gt; stack = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Stack</span>&lt;&gt;();<br>        <span class="hljs-type">Node</span> <span class="hljs-variable">pre</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>        <span class="hljs-keyword">while</span> (!stack.isEmpty() || head != <span class="hljs-literal">null</span>) &#123;<br>            <span class="hljs-keyword">if</span> (head != <span class="hljs-literal">null</span>) &#123;<br>                stack.push(head);<br>                head = head.left;<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                head = stack.pop();<br>                <span class="hljs-comment">// 出现降序</span><br>                <span class="hljs-keyword">if</span> (pre != <span class="hljs-literal">null</span> &amp;&amp; pre.value &gt; head.value) &#123;<br>                    <span class="hljs-comment">// 第一次出现取pre</span><br>                    errs[<span class="hljs-number">0</span>] = errs[<span class="hljs-number">0</span>] == <span class="hljs-literal">null</span> ? pre : errs[<span class="hljs-number">0</span>];<br>                    <span class="hljs-comment">// 第二次出现取head</span><br>                    errs[<span class="hljs-number">1</span>] = head;<br>                &#125;<br>                pre = head;<br>                head = head.right;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> errs;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>进阶问题:<br>在结构上交换这两个错误节点。<br>解法:<br>若要在结构上交换两个错误节点，首先应该找到两个错误节点的父结点，在二叉树遍历时如果出现左或右子节点是错误节点，添加进数组即可。<br>现在假设两个错误节点是e1和e2，其父结点分别是e1P和e2P，其子结点分别是e1L，e1R，e2L，e2R。但是有两种特殊的情况: 1.e1&#x2F;e2是头节点，其父结点e1P&#x2F;e2P就为null，不能直接利用父节点来交换节点。2.e1&#x2F;e2是e2&#x2F;e1的子结点，如果直接交换父结点会出现自己指向自己的错误，导致整个树结构错误。<br>还要确定的一点是e1&#x2F;e2分别是其父结点的左孩子还是右孩子节点，但是因为中序遍历e1在e2前面，所以e1一定不是e2的右孩子节点，e2一定也不是e1的左孩子节点。<br>根据以上条件，可以列出以下所有的可能：</p>
+<ol>
+<li>e1是头节点，e1是e2的头节点，且e2只能是e1的右孩子节点</li>
+<li>e1是头节点，e1不是e2的头节点，e2是e2P的左孩子节点</li>
+<li>e1是头节点，e1不是e2的头节点，e2是e2P的右孩子节点</li>
+<li>e2是头节点，e2是e1的头节点，且e1只能是e2的左孩子节点</li>
+<li>e2是头节点，e2不是e1的头节点，e1是e1P的左孩子节点</li>
+<li>e2是头节点，e2不是e1的头节点，e1是e1P的右孩子节点</li>
+<li>e1和e2都不是头节点，e1是e2的头节点，此时e2只能是e1的右孩子节点，e1是e1P的左孩子节点</li>
+<li>e1和e2都不是头节点，e1是e2的头节点，此时e2只能是e1的右孩子节点，e1是e1P的右孩子节点</li>
+<li>e1和e2都不是头节点，e2是e1的头节点，此时e1只能是e2的左孩子节点，e2是e2P的左孩子节点</li>
+<li>e1和e2都不是头节点，e2是e1的头节点，此时e1只能是e2的左孩子节点，e2是e2P的右孩子节点</li>
+<li>e1和e2都不是头节点，谁也不是谁的头节点，e1是e1P的左孩子节点，e2是e2P的左孩子节点</li>
+<li>e1和e2都不是头节点，谁也不是谁的头节点，e1是e1P的左孩子节点，e2是e2P的右孩子节点</li>
+<li>e1和e2都不是头节点，谁也不是谁的头节点，e1是e1P的右孩子节点，e2是e2P的左孩子节点</li>
+<li>e1和e2都不是头节点，谁也不是谁的头节点，e1是e1P的右孩子节点，e2是e2P的右孩子节点</li>
+</ol>
+<p>当情况1<del>3发生时，e2应该为树新的根结点，情况4</del>6发生时，e1应该为树新的根结点。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.Stack;<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>    <span class="hljs-comment">// 给出两个错误节点，找到两个错误节点的父结点</span><br>    <span class="hljs-keyword">public</span> Node[] getTwoErrParents(Node head, Node e1, Node e2) &#123;<br>        Node[] parents = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Node</span>[<span class="hljs-number">2</span>];<br>        <span class="hljs-keyword">if</span> (head == <span class="hljs-literal">null</span>) &#123;<br>            <span class="hljs-keyword">return</span> parents;<br>        &#125;<br>        Stack&lt;Node&gt; stack = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Stack</span>&lt;&gt;();<br>        <span class="hljs-keyword">while</span> (!stack.isEmpty() || head != <span class="hljs-literal">null</span>) &#123;<br>            <span class="hljs-keyword">if</span> (head != <span class="hljs-literal">null</span>) &#123;<br>                stack.push(head);<br>                head = head.left;<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                head = stack.pop();<br>                <span class="hljs-keyword">if</span> (head.left == e1 || head.right == e1) &#123;<br>                    parents[<span class="hljs-number">0</span>] = head;<br>                &#125;<br>                <span class="hljs-keyword">if</span> (head.left == e2 || head.right == e2) &#123;<br>                    parents[<span class="hljs-number">1</span>] = head;<br>                &#125;<br>                head = head.right;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> parents;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> Node <span class="hljs-title function_">recoverTree</span><span class="hljs-params">(Node head)</span> &#123;<br>       Node[] errs = getTwoErrNodes(head);<br>       Node[] parents = getTwoErrParents(head, errs[<span class="hljs-number">0</span>], errs[<span class="hljs-number">1</span>]);<br>       <span class="hljs-type">Node</span> <span class="hljs-variable">e1</span> <span class="hljs-operator">=</span> errs[<span class="hljs-number">0</span>];<br>       <span class="hljs-type">Node</span> <span class="hljs-variable">e1P</span> <span class="hljs-operator">=</span> parents[<span class="hljs-number">0</span>];<br>       <span class="hljs-type">Node</span> <span class="hljs-variable">e1L</span> <span class="hljs-operator">=</span> e1.left;<br>       <span class="hljs-type">Node</span> <span class="hljs-variable">e1R</span> <span class="hljs-operator">=</span> e1.right;<br>       <span class="hljs-type">Node</span> <span class="hljs-variable">e2</span> <span class="hljs-operator">=</span> errs[<span class="hljs-number">1</span>];<br>       <span class="hljs-type">Node</span> <span class="hljs-variable">e2P</span> <span class="hljs-operator">=</span> parents[<span class="hljs-number">1</span>];<br>       <span class="hljs-type">Node</span> <span class="hljs-variable">e2L</span> <span class="hljs-operator">=</span> e2.left;<br>       <span class="hljs-type">Node</span> <span class="hljs-variable">e2R</span> <span class="hljs-operator">=</span> e2.right;<br><br>       <span class="hljs-keyword">if</span> (head == e1) &#123;<br>           <span class="hljs-comment">// 情况1</span><br>           <span class="hljs-keyword">if</span> (e1 == e2P) &#123;<br>               e2.left = e1L;<br>               e2.right = e1;<br>               e1.left = e2L;<br>               e1.right = e2R;<br>           &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (e2P.left == e2) &#123; <span class="hljs-comment">// 情况2</span><br>               e2P.left = e1;<br>               e1.left = e2L;<br>               e1.right = e2R;<br>               e2.left = e1L;<br>               e2.right = e1R;<br>           &#125; <span class="hljs-keyword">else</span> &#123; <span class="hljs-comment">// 情况3</span><br>               e2P.right = e1;<br>               e1.left = e2L;<br>               e1.right = e2R;<br>               e2.left = e1L;<br>               e2.right = e1R;<br>           &#125;<br>           head = e2;<br>       &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (head == e2) &#123;<br>           <span class="hljs-comment">// 情况4</span><br>           <span class="hljs-keyword">if</span> (e2 == e1P) &#123;<br>               e1.right = e2R;<br>               e1.left = e2;<br>               e2.left = e1L;<br>               e2.right = e1R;<br>           &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (e1P.left == e1) &#123; <span class="hljs-comment">// 情况5</span><br>               e1P.left = e2;<br>               e1.left = e2L;<br>               e2.right = e2R;<br>               e2.left = e1L;<br>               e2.right = e1R;<br>           &#125; <span class="hljs-keyword">else</span> &#123; <span class="hljs-comment">// 情况6</span><br>               e1P.right = e2;<br>               e1.left = e2L;<br>               e1.right = e2R;<br>               e2.left = e1L;<br>               e2.right = e1R;<br>           &#125;<br>           head = e1;<br>       &#125; <span class="hljs-keyword">else</span> &#123;<br>           <span class="hljs-keyword">if</span> (e1 == e2P) &#123;<br>               <span class="hljs-comment">// 情况7</span><br>               <span class="hljs-keyword">if</span> (e1 = e1P.left) &#123;<br>                   e1P.left = e2;<br>                   e2.left = e1L;<br>                   e2.right = e2;<br>                   e1.left = e2L;<br>                   e1.right = e2R;<br>               &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (e1 == e1P.right) &#123; <span class="hljs-comment">// 情况8</span><br>                   e1P.right = e2;<br>                   e2.left = e1L;<br>                   e2.right = e1;<br>                   e1.left = e2L;<br>                   e1.right = e2R;<br>               &#125;<br>           &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (e2 == e1P) &#123;<br>               <span class="hljs-comment">// 情况9</span><br>               <span class="hljs-keyword">if</span> (e2P.left == e2) &#123;<br>                   e2P.left = e1;<br>                   e2.left = e1L;<br>                   e2.right = e1R;<br>                   e1.left = e2;<br>                   e1.right = e2R;<br>               &#125; <span class="hljs-keyword">else</span> &#123; <span class="hljs-comment">//情况10</span><br>                   e2P.right = e1;<br>                   e2.left = e1L;<br>                   e2.right = e1R;<br>                   e1.left = e2;<br>                   e1.right = e2R;<br>               &#125;<br>           &#125; <span class="hljs-keyword">else</span> &#123;<br>               <span class="hljs-keyword">if</span> (e1P.left == e1) &#123;<br>                   <span class="hljs-comment">// 情况11</span><br>                   <span class="hljs-keyword">if</span> (e2P.left == e2) &#123;<br>                       e1.left = e2L;<br>                       e1.right = e2R;<br>                       e2.left = e1L;<br>                       e2.right = e1R;<br>                       e1P.left = e2;<br>                       e2P.left = e1;<br>                    &#125; <span class="hljs-keyword">else</span> &#123; <span class="hljs-comment">// 情况12</span><br>                       e1.left = e2L;<br>                       e1.right = e2R;<br>                       e2.left = e1L;<br>                       e2.right = e1R;<br>                       e1P.left = e2;<br>                       e2P.right = e1;<br>                   &#125;<br>               &#125; <span class="hljs-keyword">else</span> &#123;<br>                   <span class="hljs-comment">// 情况13</span><br>                   <span class="hljs-keyword">if</span> (e2P.left == e2) &#123;<br>                       e1.left = e2L;<br>                       e1.right = e2R;<br>                       e2.left = e1L;<br>                       e2.right = e1R;<br>                       e1P.right = e2;<br>                       e2P.left = e1;<br>                   &#125; <span class="hljs-keyword">else</span> &#123; <span class="hljs-comment">// 情况14</span><br>                       e1.left = e2L;<br>                       e1.right = e2R;<br>                       e2.left = e1L;<br>                       e2.right = e1R;<br>                       e1P.right = e2;<br>                       e2P.right = e1;<br>                   &#125;<br>               &#125;<br>           &#125;<br>       &#125;<br>       <span class="hljs-keyword">return</span> head;<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9D%A2%E8%AF%95%E6%8C%87%E5%8D%97%E7%B3%BB%E5%88%97/" class="category-chain-item">代码面试指南系列</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">#数据结构</a>
+      
+        <a href="/tags/%E7%AE%97%E6%B3%95/">#算法</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>代码面试指南系列（三十）：调整搜索二叉树中两个错误的节点</div>
+      <div>http://example.com/2020/02/15/D-DataStructureAndAlgorithm/E-ZuoInterview/30-getTwoErrorNodes/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>ChenXi</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2020年2月15日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/02/16/D-DataStructureAndAlgorithm/E-ZuoInterview/42-nodeNum/" title="代码面试指南系列（四十二）：统计完全二叉树的节点数">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">代码面试指南系列（四十二）：统计完全二叉树的节点数</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/02/15/D-DataStructureAndAlgorithm/E-ZuoInterview/31-contains/" title="代码面试指南系列（三十一）：判断t1树是否包含t2树的全部的拓扑结构">
+                        <span class="hidden-mobile">代码面试指南系列（三十一）：判断t1树是否包含t2树的全部的拓扑结构</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

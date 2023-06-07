@@ -1,0 +1,683 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ChenXi">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="题目描述:给定一个N*3的矩阵matrix，对于每一个长度为3的小数组arr，都表示一个大楼的三个数据。arr[0]表示大楼的左边界，arr[1]表示大楼的右边界，arr[2]表示大楼的高度。每座大楼的地基都在X轴上，大楼之间可能会有重叠，请返回整体的轮廓线数组。 解法一: 有序表红黑树、AVL数等结构都属于有序表，这种表结构是把所有在其中的数据按照key的排序来组织，并提供如下操作，这些操作的复">
+<meta property="og:type" content="article">
+<meta property="og:title" content="代码面试指南系列（一百一十三）：大楼轮廓问题">
+<meta property="og:url" content="http://example.com/2020/02/29/D-DataStructureAndAlgorithm/E-ZuoInterview/113-buildingOutline/index.html">
+<meta property="og:site_name" content="陈曦の博客">
+<meta property="og:description" content="题目描述:给定一个N*3的矩阵matrix，对于每一个长度为3的小数组arr，都表示一个大楼的三个数据。arr[0]表示大楼的左边界，arr[1]表示大楼的右边界，arr[2]表示大楼的高度。每座大楼的地基都在X轴上，大楼之间可能会有重叠，请返回整体的轮廓线数组。 解法一: 有序表红黑树、AVL数等结构都属于有序表，这种表结构是把所有在其中的数据按照key的排序来组织，并提供如下操作，这些操作的复">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-02-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-07T00:28:32.739Z">
+<meta property="article:author" content="ChenXi">
+<meta property="article:tag" content="数据结构">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>代码面试指南系列（一百一十三）：大楼轮廓问题 - 陈曦の博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>陈曦の博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="代码面试指南系列（一百一十三）：大楼轮廓问题"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2020-02-29 00:00" pubdate>
+          2020年2月29日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          29 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">代码面试指南系列（一百一十三）：大楼轮廓问题</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述:"></a>题目描述:</h3><p>给定一个N*3的矩阵matrix，对于每一个长度为3的小数组arr，都表示一个大楼的三个数据。arr[0]表示大楼的左边界，arr[1]表示大楼的右边界，arr[2]表示大楼的高度。每座大楼的地基都在X轴上，大楼之间可能会有重叠，请返回整体的轮廓线数组。</p>
+<h4 id="解法一-有序表"><a href="#解法一-有序表" class="headerlink" title="解法一: 有序表"></a>解法一: 有序表</h4><p>红黑树、AVL数等结构都属于有序表，这种表结构是把所有在其中的数据按照key的排序来组织，并提供如下操作，这些操作的复杂度都是O(logN)级别的：</p>
+<ol>
+<li><p>void out(K key, V value): 将一个(key, value)添加到表中，或者将key的记录更新成value</p>
+</li>
+<li><p>V get(K key): 根据给定的key，查询value并返回</p>
+</li>
+<li><p>void remove(K key): 移除key的记录</p>
+</li>
+<li><p>boolean containsKey(K key): 查询是否有关key的记录</p>
+</li>
+<li><p>K firstKey(): 返回所有键值的排序结果中，最左(最小)的那个</p>
+</li>
+<li><p>K lastKey(): 返回所有键值的排序结果中，最右(最大)的那个</p>
+</li>
+<li><p>K floorKey(K key): 如果表中存入过key，返回key；否则返回所有键值排序结果中，key的前一个</p>
+</li>
+<li><p>K ceilingKey(K key): 如果表中存入过key，返回key；否则返回所有键值排序结果中，key的后一个</p>
+</li>
+<li><p>每一个大楼数组都可以看做在左边界加入了一个高度，在右边界删掉了一个高度。比如[1,7,4]这个大楼，可以看做在1位置新加了一个高度4，在7位置删除了一个高度4。所以，一个大楼数组可以生成两个描述高度变化的对象。比如[1,7,4]可以生成[1,加入,一个高度4]和[7,删除,一个高度4]两个对象。</p>
+</li>
+<li><p>将所有的大楼数组描述成高度变化的对象。</p>
+</li>
+<li><p>将描述高度变化的对象数组排序，排序的比较策略：1.第一个维度的值从小到大排序；2.如果第一个维度的值相等，看第二个维度的值，加入排在前，删除排在后；如果两个对象第一维度和第二维度的值都相等，则认为两个对象相等，谁在前都行。</p>
+</li>
+<li><p>准备有序表，key是一个整数，代表高度，value是这个高度目前出现的次数。当某个key出现的次数为0，删掉这条记录，初始没有任何记录；准备另一个有序表，key是一个整数，代表X轴上的一个位置，value是这个位置上的最大高度。当某个key出现的次数为0，删掉这条记录，初始没有任何记录。</p>
+</li>
+<li><p>根据生成的描述高度变化的数组，对两个有序表进行如下操作：若为添加操作，在key为高度的有序表中添加k-v对，如果已经存在，对应v+1；在key为X轴位置的有序表中添加k-v对；若为删除操作，key为高度的有序表中对应k-v对的value-1，若-1后为0，删除；在key为X轴的有序表中，添加k-v对，v为key为高度的有序表中的lastKey，若高度有序表空了，v就为0。</p>
+</li>
+<li><p>根据生成的两张有序表，生成轮廓线：最终高度为key的有序表肯定为空，根据X轴位置为key的有序表生成。就是确定每个位置的最高高度和这个高度的结束位置。对于每个位置都有三个信息，这个高度的轮廓线的开始位置、结束位置和高度。当后一个位置和前面高度不同时，代表该生成一条轮廓线。</p>
+</li>
+</ol>
+<p>时间复杂度: O(NlogN); 辅助空间复杂度: O(N)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.Arrays;<br><span class="hljs-keyword">import</span> java.util.List;<br><span class="hljs-keyword">import</span> java.util.ArrayList;<br><span class="hljs-keyword">import</span> java.util.TreeMap;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Node</span> &#123;<br>        <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> x;<br>        <span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> isAdd;<br>        <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> h;<br>        <span class="hljs-keyword">public</span> <span class="hljs-title function_">Node</span><span class="hljs-params">(<span class="hljs-type">int</span> x, <span class="hljs-type">boolean</span> isAdd, <span class="hljs-type">int</span> h)</span> &#123;<br>            <span class="hljs-built_in">this</span>.x = x;<br>            <span class="hljs-built_in">this</span>.isAdd = isAdd;<br>            <span class="hljs-built_in">this</span>.h = h;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-comment">// 排序比较策略</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">NodeComparator</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Comparator</span>&lt;Node&gt; &#123;<br>        <span class="hljs-meta">@override</span><br>        <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">compare</span> <span class="hljs-params">(Node o1, Node o2)</span> &#123;<br>            <span class="hljs-keyword">if</span> (o1.x != o2.x) &#123;<br>                <span class="hljs-keyword">return</span> o1.x - o2.x;<br>            &#125;<br>            <span class="hljs-keyword">if</span> (o1.isAdd != o2.isAdd) &#123;<br>                <span class="hljs-keyword">return</span> o1.isAdd ? -<span class="hljs-number">1</span> : <span class="hljs-number">1</span>;<br>            &#125;<br>            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-comment">// Main方法</span><br>    <span class="hljs-keyword">public</span> List&lt;List&lt;Integer&gt;&gt; <span class="hljs-title function_">buildingOutline</span> <span class="hljs-params">(<span class="hljs-type">int</span>[][] matrix)</span> &#123;<br>        Node[] nodes = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Node</span>[matrix.length * <span class="hljs-number">2</span>];<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; matrix.length; i++) &#123;<br>            nodes[i * <span class="hljs-number">2</span>] = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Node</span>(matrix[i][<span class="hljs-number">0</span>], <span class="hljs-literal">true</span>, matrix[i][<span class="hljs-number">2</span>]);<br>            nodes[i * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>] = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Node</span>(matrix[i][<span class="hljs-number">0</span>], <span class="hljs-literal">false</span>, matrix[i][<span class="hljs-number">2</span>]);<br>        &#125;<br>        <span class="hljs-comment">// 排序</span><br>        Arrays.sort(nodes, <span class="hljs-keyword">new</span> <span class="hljs-title class_">NodeComparator</span>());<br>        <span class="hljs-comment">// TreeMap是红黑树结构</span><br>        TreeMap&lt;Integer, Integer&gt; mapHeightTimes = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TreeMap</span>&lt;&gt;();<br>        TreeMap&lt;Integer, Integer&gt; maxValueHeight = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TreeMap</span>&lt;&gt;();<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; nodes.length; i++) &#123;<br>            <span class="hljs-keyword">if</span> (nodes[i].isAdd) &#123;<br>                <span class="hljs-keyword">if</span> (!mapHeightTimes.containsKey(nodes[i].h)) &#123;<br>                    mapHeightTimes.put(nodes[i].h, <span class="hljs-number">1</span>);<br>                &#125; <span class="hljs-keyword">else</span> &#123;<br>                    mapHeightTimes.put(nodes[i].h, map.get(nodes[i].h) + <span class="hljs-number">1</span>);<br>                &#125;<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                <span class="hljs-keyword">if</span> (mapHeightTimes.get(nodes[i].h) == <span class="hljs-number">1</span>) &#123;<br>                    mapHeightTimes.remove(nodes[i].h);<br>                &#125; <span class="hljs-keyword">else</span> &#123;<br>                    mapHeightTimes.put(nodes[i].h, mapHeightTimes.get(nodes[i]) - <span class="hljs-number">1</span>);<br>                &#125;<br>            &#125;<br>            <span class="hljs-comment">// 根据mapHeightTimes中的最大高度，设置maxXvalueHeight表</span><br>            <span class="hljs-keyword">if</span> (mapHeightTimes.isEmpty()) &#123;<br>                mapXvalueHeight.put(nodes[i].x, <span class="hljs-number">0</span>);<br>             &#125; <span class="hljs-keyword">else</span> &#123;<br>                mapXvalueHeight.put(nodes[i].x, mapHeightTimes.lastKey());<br>             &#125; <br>        &#125;<br><br>        List&lt;List&lt;Integer&gt;&gt; res = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();<br>        <span class="hljs-type">int</span> <span class="hljs-variable">start</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">preHeight</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span> (Entry&lt;Integer, Integer&gt; entry : mapXvalueHeight.entrySet()) &#123;<br>            <span class="hljs-type">int</span> <span class="hljs-variable">curX</span> <span class="hljs-operator">=</span> entry.getKey();<br>            <span class="hljs-type">int</span> <span class="hljs-variable">curMaxHeight</span> <span class="hljs-operator">=</span> entry.getValue();<br>            <span class="hljs-keyword">if</span> (preHeight != curMaxHeight) &#123;<br>                <span class="hljs-keyword">if</span> (preHeight != <span class="hljs-number">0</span>) &#123;<br>                    res.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;(Arrays.asList(start, curX, preHeight)));<br>                &#125;<br>                start = curX;<br>                preHeight = curMaxHeight;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> res;        <br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9D%A2%E8%AF%95%E6%8C%87%E5%8D%97%E7%B3%BB%E5%88%97/" class="category-chain-item">代码面试指南系列</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">#数据结构</a>
+      
+        <a href="/tags/%E7%AE%97%E6%B3%95/">#算法</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>代码面试指南系列（一百一十三）：大楼轮廓问题</div>
+      <div>http://example.com/2020/02/29/D-DataStructureAndAlgorithm/E-ZuoInterview/113-buildingOutline/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>ChenXi</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2020年2月29日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/02/29/D-DataStructureAndAlgorithm/E-ZuoInterview/112-getMinSplitCost/" title="代码面试指南系列（一百一十二）：分金条的最小花费">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">代码面试指南系列（一百一十二）：分金条的最小花费</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/02/29/D-DataStructureAndAlgorithm/E-ZuoInterview/114-goodStart/" title="代码面试指南系列（一百一十四）：加油站良好出发点问题">
+                        <span class="hidden-mobile">代码面试指南系列（一百一十四）：加油站良好出发点问题</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

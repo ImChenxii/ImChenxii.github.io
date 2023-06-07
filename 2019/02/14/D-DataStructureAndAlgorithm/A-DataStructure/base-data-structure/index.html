@@ -1,0 +1,1221 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ChenXi">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="数据结构链表 解决了列表插入和删除时需要移动大量元素，显然需要耗费大量时间的弊端  链表的性质所有的元素都不考虑相邻位置，而只是让每个元素知道下一个元素的位置在哪里，这样，就形成了结点，结点包含自己对应的值和下一个元素对应的位置。  顺序存储结构需要预分配存储空间，分大了浪费，分小了易发生上溢； 单链表不需要分配存储空间，只要有就可以分配，元素个数也不受限制。 链表中第一个结点的存储位置叫做头指针">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据结构">
+<meta property="og:url" content="http://example.com/2019/02/14/D-DataStructureAndAlgorithm/A-DataStructure/base-data-structure/index.html">
+<meta property="og:site_name" content="陈曦の博客">
+<meta property="og:description" content="数据结构链表 解决了列表插入和删除时需要移动大量元素，显然需要耗费大量时间的弊端  链表的性质所有的元素都不考虑相邻位置，而只是让每个元素知道下一个元素的位置在哪里，这样，就形成了结点，结点包含自己对应的值和下一个元素对应的位置。  顺序存储结构需要预分配存储空间，分大了浪费，分小了易发生上溢； 单链表不需要分配存储空间，只要有就可以分配，元素个数也不受限制。 链表中第一个结点的存储位置叫做头指针">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E9%93%BE%E8%A1%A8.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E9%93%BE%E8%A1%A8%E8%99%9A%E6%8B%9F%E5%A4%B4%E7%BB%93%E7%82%B9.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E5%BE%AA%E7%8E%AF%E9%93%BE%E8%A1%A8.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E6%A0%88%E7%9A%84%E5%85%B1%E4%BA%AB%E7%A9%BA%E9%97%B4.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E6%A0%88%E7%9A%84%E9%93%BE%E5%BC%8F%E7%BB%93%E6%9E%84.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E9%98%9F%E5%88%97%E5%87%BA%E9%98%9F%E4%BC%98%E5%8C%96.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E9%98%9F%E5%88%97%E5%81%87%E6%BA%A2%E5%87%BA.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E5%BE%AA%E7%8E%AF%E9%98%9F%E5%88%97.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E5%BE%AA%E7%8E%AF%E9%98%9F%E5%88%972.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E9%93%BE%E9%98%9F%E5%88%97.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E9%93%BE%E9%98%9F%E5%88%97%E5%87%BA%E9%98%9F.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E6%A0%91%E7%9A%84%E5%BA%A6.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E6%BB%A1%E4%BA%8C%E5%8F%89%E6%A0%91.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E5%AE%8C%E5%85%A8%E4%BA%8C%E5%8F%89%E6%A0%91.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E7%BB%93%E7%82%B9%E4%B8%AA%E6%95%B0%E5%85%B3%E7%B3%BB.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E6%A0%91%E7%9A%84%E9%A1%BA%E5%BA%8F%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E6%A0%91%E7%9A%84%E9%A1%BA%E5%BA%8F%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84%E6%95%B0%E7%BB%84.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E5%89%8D%E4%B8%AD%E6%8E%A8%E5%90%8E1.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E5%89%8D%E4%B8%AD%E6%8E%A8%E5%90%8E2.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E5%89%8D%E4%B8%AD%E6%8E%A8%E5%90%8E3.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E4%BA%8C%E5%8F%89%E6%A0%91%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2%E6%A0%91.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/BST%E6%9C%80%E5%B0%8F%E5%80%BC.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/BST%E5%88%A0%E9%99%A4%E6%9C%80%E5%B0%8F%E5%80%BC.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/BST%E5%88%A0%E9%99%A4%E6%9C%80%E5%B0%8F%E5%80%BC%E5%90%8E.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E5%88%A0%E9%99%A4%E5%B7%A6%E5%AD%A9%E5%AD%90.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E5%88%A0%E9%99%A4%E4%BB%BB%E6%84%8F%E5%85%83%E7%B4%A0.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E5%8F%B3%E6%97%8B%E8%BD%AC1.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E5%B7%A6%E6%97%8B%E8%BD%AC.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/LR.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/LR2.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/RL.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/Rl2.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E6%9C%80%E5%A4%A7%E5%A0%86%E6%B7%BB%E5%8A%A0%E5%85%83%E7%B4%A01.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E6%9C%80%E5%A4%A7%E5%A0%86%E6%B7%BB%E5%8A%A0%E5%85%83%E7%B4%A02.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E6%9C%80%E5%A4%A7%E5%A0%86%E6%B7%BB%E5%8A%A0%E5%85%83%E7%B4%A03.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E6%9C%80%E5%A4%A7%E5%A0%86%E5%8F%96%E5%87%BA%E5%85%83%E7%B4%A01.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E6%9C%80%E5%A4%A7%E5%A0%86%E5%8F%96%E5%87%BA%E5%85%83%E7%B4%A02.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E6%9C%80%E5%A4%A7%E5%A0%86%E5%8F%96%E5%87%BA%E5%85%83%E7%B4%A03.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E6%9C%80%E5%A4%A7%E5%A0%86%E5%8F%96%E5%87%BA%E5%85%83%E7%B4%A04.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/Heapify.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E7%BA%BF%E6%AE%B5%E6%A0%91.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E7%BA%BF%E6%AE%B5%E6%A0%91%E6%80%A7%E8%B4%A8.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E7%BA%BF%E6%AE%B5%E6%A0%91%E6%9F%A5%E8%AF%A21.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E7%BA%BF%E6%AE%B5%E6%A0%91%E6%9F%A5%E8%AF%A2%E5%85%83%E7%B4%A02.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E7%BA%BF%E6%AE%B5%E6%A0%91%E6%9F%A5%E8%AF%A23.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/Trie%E7%BB%93%E6%9E%84.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E5%B9%B6%E6%9F%A5%E9%9B%86.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E5%B9%B6%E6%9F%A5%E9%9B%86QF.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E5%B9%B6%E6%9F%A5%E9%9B%86QU.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E5%B9%B6%E6%9F%A5%E9%9B%86QU2.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E5%B9%B6%E6%9F%A5%E9%9B%86size%E4%BC%98%E5%8C%961.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E5%B9%B6%E6%9F%A5%E9%9B%86size%E4%BC%98%E5%8C%962.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E5%B9%B6%E6%9F%A5%E9%9B%86rank%E4%BC%98%E5%8C%961.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E5%B9%B6%E6%9F%A5%E9%9B%86%E5%9F%BA%E4%BA%8Erank2.PNG">
+<meta property="og:image" content="http://example.com/">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E8%B7%AF%E5%BE%84%E5%8E%8B%E7%BC%A91.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E8%B7%AF%E5%BE%84%E5%8E%8B%E7%BC%A92.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E8%B7%AF%E5%BE%84%E5%8E%8B%E7%BC%A93.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/2-3%E6%A0%91.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/2-3%E6%A0%91%E6%8F%92%E5%85%A51.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/2-3%E6%A0%91%E6%8F%92%E5%85%A52.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/2-3%E6%A0%91%E6%8F%92%E5%85%A53.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/2-3%E6%A0%91%E5%88%A0%E9%99%A41.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/2-3%E6%A0%91%E5%88%A0%E9%99%A42-1.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/2-3%E6%A0%91%E5%88%A0%E9%99%A42-2.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/2-3%E6%A0%91%E5%88%A0%E9%99%A42-3.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/2-3%E6%A0%91%E5%88%A0%E9%99%A42-4.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/2-3%E5%88%A0%E9%99%A43-1.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/2-3%E5%88%A0%E9%99%A43-2.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/B%E6%A0%91.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/B+%E6%A0%91.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E7%BA%A2%E9%BB%91%E6%A0%91%E5%92%8C2-3%E6%A0%91.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E7%BA%A2%E9%BB%91%E6%A0%91%E5%92%8C2-3%E6%A0%912.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E9%93%BE%E5%9C%B0%E5%9D%80%E6%B3%95.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E5%85%AC%E5%85%B1%E6%BA%A2%E5%87%BA%E5%8C%BA%E6%B3%95.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E6%97%A0%E5%90%91%E5%9B%BE.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E6%9C%89%E5%90%91%E5%9B%BE.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E6%97%A0%E5%90%91%E5%AE%8C%E5%85%A8%E5%9B%BE.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E6%9C%89%E5%90%91%E5%AE%8C%E5%85%A8%E5%9B%BE.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E8%BF%9E%E9%80%9A%E5%9B%BE.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E5%9B%BEDFS.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E5%9B%BEBFS.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E6%8B%93%E6%89%91%E5%BA%8F%E5%88%97.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E5%A4%A7O%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E5%A4%8D%E6%9D%82%E5%BA%A6.PNG">
+<meta property="og:image" content="http://qiniu.chenxii.cn/ds/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E5%A4%8D%E6%9D%82%E5%BA%A6.PNG">
+<meta property="article:published_time" content="2019-02-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-07T00:28:32.723Z">
+<meta property="article:author" content="ChenXi">
+<meta property="article:tag" content="数据结构">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://qiniu.chenxii.cn/ds/%E9%93%BE%E8%A1%A8.PNG">
+  
+  
+  
+  <title>数据结构 - 陈曦の博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>陈曦の博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="数据结构"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-02-14 00:00" pubdate>
+          2019年2月14日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          19k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          161 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">数据结构</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><h3 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h3><blockquote>
+<p>解决了列表插入和删除时需要移动大量元素，显然需要耗费大量时间的弊端</p>
+</blockquote>
+<h4 id="链表的性质"><a href="#链表的性质" class="headerlink" title="链表的性质"></a>链表的性质</h4><p>所有的元素都不考虑相邻位置，而只是让每个元素知道下一个元素的位置在哪里，这样，就形成了结点，结点包含自己对应的值和下一个元素对应的位置。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E9%93%BE%E8%A1%A8.PNG" srcset="/img/loading.gif" lazyload alt="链表"></p>
+<p>顺序存储结构需要预分配存储空间，分大了浪费，分小了易发生上溢； 单链表不需要分配存储空间，只要有就可以分配，元素个数也不受限制。</p>
+<p>链表中第一个结点的存储位置叫做头指针，线性链表的最后一个结点指针为”空”，即null。有时为了方便链表的操作，通常在链表头前加一个虚拟头结点(dummyHead)，也称作头指针，虚拟头结点的作用：有了虚拟头结点，对在第一元素结点前插入结点和删除第一结点，其操作与其它结点的操作就统一了。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E9%93%BE%E8%A1%A8%E8%99%9A%E6%8B%9F%E5%A4%B4%E7%BB%93%E7%82%B9.PNG" srcset="/img/loading.gif" lazyload alt="链表虚拟头结点"></p>
+<h4 id="常用操作时间复杂度"><a href="#常用操作时间复杂度" class="headerlink" title="常用操作时间复杂度"></a>常用操作时间复杂度</h4><p>单链表查询操作时间复杂度：O(N)</p>
+<p>单链表增加元素操作时间复杂度：O(1)</p>
+<p>单链表删除元素操作时间复杂度：O(1)</p>
+<h4 id="单链表和线性表-列表-的选择原则"><a href="#单链表和线性表-列表-的选择原则" class="headerlink" title="单链表和线性表(列表)的选择原则"></a>单链表和线性表(列表)的选择原则</h4><ul>
+<li>若线性表需要频繁查找，很少进行插入和删除操作时，宜采用顺序存储结构。若需要频繁插入和删除时，宜采用单链表结构。</li>
+<li>当线性表中的元素个数变化较大或者根本不知道有多大肘，最好用单链表结构，这样可以不需要考虑存储空间的大小问题。</li>
+</ul>
+<h4 id="静态链表"><a href="#静态链表" class="headerlink" title="静态链表"></a>静态链表</h4><p>用数组描述的链表叫做静态链表，让数组的元素都是由两个数据域组成，data和cur 。数组的每个下标都对应一个data和一个cur。数据域data，用来存放数据元素，也就是通常要处理的数据；而游标cur 相当于单链表中的next 指针，存放该元素的后继在数组中的下标。</p>
+<h4 id="循环链表"><a href="#循环链表" class="headerlink" title="循环链表"></a>循环链表</h4><blockquote>
+<p> 解决了对于单链表，由于每个结点只存储了向后的指针，到了尾标志就停止了向后链的操作，这样，当中某一结点就无法找到它的前驱结点了的问题</p>
+</blockquote>
+<p>将单链表中终端结点的指针端由空指针改为指向头结点，就使整个单链表形成一个环，这种头尾相接的单链表称为单循环链表。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E5%BE%AA%E7%8E%AF%E9%93%BE%E8%A1%A8.PNG" srcset="/img/loading.gif" lazyload alt="循环链表"></p>
+<p>循环链表和单链表的主要差异就在于循环的判断条件上，单链表是判断结点的下一结点是否为空，现在则是判断结点的下一结点是否等于头结点，是的时候，则循环结束。</p>
+<p>想用O(1)的时间由链表指针访问到最后一个结点，可设置指向终端结点的尾指针来代替头指针，此时查找开始结点和终端结点都很方便。</p>
+<h4 id="双向链表"><a href="#双向链表" class="headerlink" title="双向链表"></a>双向链表</h4><blockquote>
+<p>为了克服普通链表单向性这一缺点</p>
+</blockquote>
+<p>双向链表是指在单链表的每个结点中，再设置一个指向其前驱结点的指针域。所以在双向链表中的结点都有两个指针域，一个指向直接后继，另一个指向直接前驱。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8.PNG" srcset="/img/loading.gif" lazyload alt="双向链表"></p>
+<p>由于每个结点都需要记录两份指针，所以在空间上是要占用略多一些。但是，由于双向链表良好的对称性，使得对某个结点的前后结点的操作带来了方便，可以有效提高算法的时间性能。是用空间来换时间。</p>
+<h3 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h3><blockquote>
+<p>栈是限定仅在表尾进行插入和删除操作的线性表</p>
+</blockquote>
+<p>栈又称为后进先出(Last In First Out)的线性表，简称LlFO 结构。把允许插入和删除的一端称为栈顶(top)，另一端称为栈底(bottom)，不含任何数据元素的栈称为空栈。</p>
+<p>栈的插入和删除操作，名字为push 和pop，英文直译的是压栈和弹栈。</p>
+<h4 id="常用操作时间复杂度-1"><a href="#常用操作时间复杂度-1" class="headerlink" title="常用操作时间复杂度"></a>常用操作时间复杂度</h4><p>入栈操作时间复杂度：O(1)</p>
+<p>出栈操作时间复杂度：O(1)</p>
+<h4 id="栈的顺序存储结构"><a href="#栈的顺序存储结构" class="headerlink" title="栈的顺序存储结构"></a>栈的顺序存储结构</h4><p>线性表下标为0的一端作为栈底较好，因为首元素都存在栈底，变化最小，所以让它作栈底，入栈和出栈时不必移动其他元素，从而节省时间，再定义一个top变量来指示栈顶元素在数组中的位置。</p>
+<p>入栈时在线性表尾添加元素，并维top指针向后移动一位；出栈时在线性表末尾删除元素，并维top指针向前移动一位。</p>
+<h5 id="两栈共享空间"><a href="#两栈共享空间" class="headerlink" title="两栈共享空间"></a>两栈共享空间</h5><p>如果有两个相同类型的栈，我们为它们各自开辟了数组空间，极有可能是第一个栈已经满了，再进栈就溢出了，而另一个栈还有很多存储空间空闲。此时可以用一个数组来存储两个栈。数组有两个端点，两个栈有两个栈底，让一个栈的栈底为数组的始端，即下标为0处，另一个为栈的末端，即下标为数组长度n-1处。这样，两个栈如果增加元素，就是两端点向中间延伸。top1和top2是栈1和栈2的栈顶指针，只要它们俩不见面，两个栈就可以一直使用。两个栈见面时，也就是两个指针之间相差1 时，即top1+1&#x3D; top2时为栈满。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E6%A0%88%E7%9A%84%E5%85%B1%E4%BA%AB%E7%A9%BA%E9%97%B4.PNG" srcset="/img/loading.gif" lazyload alt="栈的共享空间"></p>
+<h4 id="栈的链式存储结构"><a href="#栈的链式存储结构" class="headerlink" title="栈的链式存储结构"></a>栈的链式存储结构</h4><p>把栈顶放在单链表的头部，栈顶在头部，单链表中比较常用的头结点也就失去了意义，通常对于链栈来说，是不需要头结点的。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E6%A0%88%E7%9A%84%E9%93%BE%E5%BC%8F%E7%BB%93%E6%9E%84.PNG" srcset="/img/loading.gif" lazyload alt="栈的链式结构"></p>
+<h3 id="队列"><a href="#队列" class="headerlink" title="队列"></a>队列</h3><blockquote>
+<p>队列是只允许在一端进行插入操作、而在另一端进行删除操作的线性表</p>
+</blockquote>
+<p>队列是一种先进先出(First In First Out) 的线性表，简称FIFO 。允许插入的一端称为队尾，允许删除的一端称为队头。</p>
+<h4 id="常用操作时间复杂度-2"><a href="#常用操作时间复杂度-2" class="headerlink" title="常用操作时间复杂度"></a>常用操作时间复杂度</h4><p>入队操作时间复杂度：O(1)</p>
+<p>出队操作时间复杂度：O(N)</p>
+<h5 id="改进出队时间复杂度的办法"><a href="#改进出队时间复杂度的办法" class="headerlink" title="改进出队时间复杂度的办法"></a>改进出队时间复杂度的办法</h5><p>如果不去限制队列的元素必须存储在数组的前n个单元这一条件，出队的性能就会大大增加。即队头不需要一定在下标为0的位置。引入两个指针，front指针指向队头元素，rear指针指向队尾元素的下一个位置，这样当的front等于rear时，此队列是空队列。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E9%98%9F%E5%88%97%E5%87%BA%E9%98%9F%E4%BC%98%E5%8C%96.PNG" srcset="/img/loading.gif" lazyload alt="队列出队优化"></p>
+<p>但存在问题：假设这个队列的总个数不超过5个，但接着入队的话，因数组末尾元素已经占用，再向后加，就会产生数组越界的错误，可实际上，队列在下标为0 和1的地方还是空闲的。把这种现象叫做”假滥出” 。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E9%98%9F%E5%88%97%E5%81%87%E6%BA%A2%E5%87%BA.PNG" srcset="/img/loading.gif" lazyload alt="队列假溢出"></p>
+<h4 id="循环队列"><a href="#循环队列" class="headerlink" title="循环队列"></a>循环队列</h4><blockquote>
+<p>解决了上述假溢出的问题</p>
+</blockquote>
+<p>循环队列解决假溢出的办法就是后面满了，再从头开始，也就是头尾相接的循环。把队列的这种头尾相接的顺序存储结构称为循环队列。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E5%BE%AA%E7%8E%AF%E9%98%9F%E5%88%97.PNG" srcset="/img/loading.gif" lazyload alt="循环队列"></p>
+<p>空队列时，front等于rear，现在当队列满时，也是front等于rear ，解决方法：</p>
+<ol>
+<li>设置一个标志变量flag，当front&#x3D; rear时，且flag&#x3D;0时为队列空，当front&#x3D;&#x3D; rear，且flag&#x3D;1时为队列满。</li>
+<li>当队列空时，条件就是front&#x3D;rear，当队列满时，我们修改其条件，保留一个元素空间。出现下图情况就认为此队列已经满了。</li>
+</ol>
+<p><img src="http://qiniu.chenxii.cn/ds/%E5%BE%AA%E7%8E%AF%E9%98%9F%E5%88%972.PNG" srcset="/img/loading.gif" lazyload alt="循环队列2"></p>
+<p>当rear&gt;front 时，此时队列的长度为rear-front，但当rear &lt; front 时，队列长度分为两段，一段是QueueSize - front，另一段是0+rear，加在一起，队列长度为rear-front+QueueSize 。因此通用的计算队列长度公式为:$(rear- front + QueueSize) %QueueSize$</p>
+<h5 id="循环链表操作时间复杂度"><a href="#循环链表操作时间复杂度" class="headerlink" title="循环链表操作时间复杂度"></a>循环链表操作时间复杂度</h5><p>入队操作时间复杂度：O(1)</p>
+<p>出队操作时间复杂度：O(1)</p>
+<h4 id="队列的链式存储结构"><a href="#队列的链式存储结构" class="headerlink" title="队列的链式存储结构"></a>队列的链式存储结构</h4><blockquote>
+<p>队列的链式存储结构，其实就是线性表的单链表，只不过它只能尾进头出而已，把它简称为链队列。</p>
+</blockquote>
+<p>为了操作上的方便，将队头指针front指向链队列的头结点，而队尾指针rear指向终端结点，空队列时，front和rear都指向头结点。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E9%93%BE%E9%98%9F%E5%88%97.PNG" srcset="/img/loading.gif" lazyload alt="链队列"></p>
+<p>人队操作时，就是在链表尾部插入结点，出队操作时，就是头结点的后继结点出队，将头结点的后继改为要出队结点后面的结点，若链表除头结点外只剩一个元素时，则需将rear 指向头结点。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E9%93%BE%E9%98%9F%E5%88%97%E5%87%BA%E9%98%9F.PNG" srcset="/img/loading.gif" lazyload alt="链队列出队"></p>
+<h4 id="优先队列"><a href="#优先队列" class="headerlink" title="优先队列"></a>优先队列</h4><blockquote>
+<p>优先队列是出队顺序和入队顺序无关而和优先级相关的队列数据结构</p>
+</blockquote>
+<h5 id="优先队列操作时间复杂度"><a href="#优先队列操作时间复杂度" class="headerlink" title="优先队列操作时间复杂度"></a>优先队列操作时间复杂度</h5><p>普通线性结构实现的优先队列：入队：O(1)，出队：O(N)(要找出最大元素)</p>
+<p>顺序线性结构实现的优先队列：入队：O(N)(要找出合适位置入队)，出队：O(1)</p>
+<p>堆结构实现的优先队列：入队：O(logN)，出队：O(logN)</p>
+<h3 id="树"><a href="#树" class="headerlink" title="树"></a>树</h3><blockquote>
+<p>树(Tree)是n(n&gt;&#x3D;0)个结点的有限集。n&#x3D;0时称为空树。</p>
+</blockquote>
+<h4 id="树的结点和度"><a href="#树的结点和度" class="headerlink" title="树的结点和度"></a>树的结点和度</h4><p>树的结点包含一个数据元素及若干指向其子树的分支。结点拥有的子树数称为结点的度(Degree) 。度为0 的结点称为叶结点(Leaf)或终端结点；度不为0的结点称为非终端结点或分支结点。除根结点之外，分支结点也称为内部结点。树的度是树内各结点的度的最大值。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E6%A0%91%E7%9A%84%E5%BA%A6.PNG" srcset="/img/loading.gif" lazyload alt="树的度"></p>
+<h4 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h4><blockquote>
+<p>二叉树(Binary Tree)是n(n&gt;&#x3D;0)个结点的有限集合，该集合或者为空集(称为空二叉树)，或者由一个根结点和两个互不相交的、分别称为根结点的左子树和右子树的二叉树组成。</p>
+</blockquote>
+<h5 id="斜树"><a href="#斜树" class="headerlink" title="斜树"></a>斜树</h5><p>所有的结点都只有左子树的二叉树叫左斜树。所有结点都是只有右子树的二叉树叫右斜树。这两者统称为斜<br>树。</p>
+<h5 id="满二叉树"><a href="#满二叉树" class="headerlink" title="满二叉树"></a>满二叉树</h5><p>在一棵二叉树中，如果所有分支结点都存在左子树和右子树，并且所有叶子都在同一层上，这样的二叉树称为满二叉树。非叶子结点的度一定是2 ，在同样深度的二叉树中，满二叉树的结点个数最多，叶子数最多。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E6%BB%A1%E4%BA%8C%E5%8F%89%E6%A0%91.PNG" srcset="/img/loading.gif" lazyload alt="满二叉树"></p>
+<p>满二叉树h层一共有$2^h-1$个结点，最后一层(h-1)层，有$2^{(h-1)}$个结点，所以最后一层结点数大致前面所有层数结点数之和。</p>
+<h5 id="完全二叉树"><a href="#完全二叉树" class="headerlink" title="完全二叉树"></a>完全二叉树</h5><p>若设二叉树的深度为h，除第 h 层外，其它各层 (1～h-1) 的结点数都达到最大个数，第 h 层所有的结点都连续集中在最左边，这就是完全二叉树。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E5%AE%8C%E5%85%A8%E4%BA%8C%E5%8F%89%E6%A0%91.PNG" srcset="/img/loading.gif" lazyload alt="完全二叉树"></p>
+<p>满二叉树一定是一棵完全二叉树，但完全二叉树不一定是满二叉树。</p>
+<p><strong>完全二叉树的特点</strong>：</p>
+<ul>
+<li>叶子结点只能出现在最下两层 </li>
+<li>最下层的叶子一定集中在左部连续位置</li>
+<li>倒数二层，若有叶子结点，一定都在右部连续位置</li>
+<li>如果结点度为1 ，则该结点只有左孩子，即不存在只有右子树的情况</li>
+<li>同样结点数的二叉树，完全二叉树的深度最小</li>
+</ul>
+<h4 id="二叉树的性质"><a href="#二叉树的性质" class="headerlink" title="二叉树的性质"></a>二叉树的性质</h4><ul>
+<li>在二叉树的第i层上至多有$2^{i-1}$个结点</li>
+<li>深度为k的二叉树至多有$2^k-1$个结点</li>
+<li>对任何一棵二叉树T，如果其叶子结点数为$n_0​$，度为2的结点数为$n_2​$，则$n_0&#x3D;n_2+1​$ 。</li>
+</ul>
+<blockquote>
+<p>推导：一棵二叉树，除了叶子结点外，剩下的就是度为1或2的结点了，设$n_1​$为度是1的结点数，则树T结点总数$n&#x3D;n_0+n_1+n_2​$。通过连线数来解决：由于根结点只有分支出去，没有分支进入，所以分支线总数从分支线进入角度统计为结点总数减去1；而度为1的结点分支线出去数为1，度为2的结点分支线出去数为2，所以分支线总数从分支线出去角度统计为度为1结点数加上2倍的度为2的结点数。两者结合即$边的总个数&#x3D;n-1&#x3D;n_1+2*n_2​$，又有$n&#x3D;n_0+n_1+n_2​$，两式结合可得：$n_0&#x3D;n_2+1​$。</p>
+<p>举例：图中由于根结点只有分支出去，没有分支进入，所以分支线总数为结点总数减去1，即$n&#x3D;9$；对于A，B，C，D结点来说，它们都有两个分支线出去，而E结点只有一个分支线出去。所以总分支线为4 x 2+1 X 1&#x3D;9即$n_1+2*n_2$。</p>
+</blockquote>
+<p><img src="http://qiniu.chenxii.cn/ds/%E7%BB%93%E7%82%B9%E4%B8%AA%E6%95%B0%E5%85%B3%E7%B3%BB.PNG" srcset="/img/loading.gif" lazyload alt="结点个数关系"></p>
+<ul>
+<li>具有n 个结点的完全二叉树的深度为$[log_2 n]+1​$(其中[]代表向下取整)</li>
+</ul>
+<blockquote>
+<p>推导：它的结点数一定小于等于同样度数的满二叉树的结点数$2^k-1$，但一定多于$2^{k-1}-1$。即满足$2^{k-1}-1&lt;n\leq 2^k-1$，由于结点数n是整数，$n\leq 2^k-1$意味着$n&lt;2^k$，$n &gt;2^{k-1}-1$意味着$n\geq 2^{k-1}$，所以$2^{k-1}\leq n&lt;2^k$，不等式两边取对数，得到$k-1\leq log_2 n&lt;k $，而k作为深数也是整数，因此$k&#x3D;[log_2 n]+1$</p>
+</blockquote>
+<ul>
+<li>如果对一棵有n个结点的完全二叉树(其深度为$[log_2 n]+1$)的结点按层序编号(从第1层到第$[log_2 n]+1$层，每层从左到右)，对任一结点$i$有:<ul>
+<li>如果$i&#x3D;1​$，则结点$i​$是二叉树的根，无父亲；如果$i&gt;1​$，则其父亲是结点$[i&#x2F;2]​$。</li>
+<li>如果$2i&gt;n$，则结点$i$无左孩子(结点$i$为叶子结点)；否则其左孩子是结点$2i$。</li>
+<li>如果$2i+1&gt;0$ ，则结点$i$无右孩子；否则其右孩子是结点$2i+1$。</li>
+</ul>
+</li>
+</ul>
+<h4 id="二叉树顺序存储结构"><a href="#二叉树顺序存储结构" class="headerlink" title="二叉树顺序存储结构"></a>二叉树顺序存储结构</h4><p>二叉树的顺序存储结构就是用一维数组存储二叉树中的结点，井且结点的存储位置，也就是数组的下标要能体现结点之间的逻辑关系，比如父亲与孩子的关系，左右兄弟的关系等。</p>
+<p>由于完全二叉树定义的严格，所以用顺序结构也可以表现出二叉树的结构来，如图所示</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E6%A0%91%E7%9A%84%E9%A1%BA%E5%BA%8F%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84.PNG" srcset="/img/loading.gif" lazyload alt="树的顺序存储结构"></p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E6%A0%91%E7%9A%84%E9%A1%BA%E5%BA%8F%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84%E6%95%B0%E7%BB%84.PNG" srcset="/img/loading.gif" lazyload alt="树的顺序存储结构数组"></p>
+<p>考虑一种极端的情况，一棵深度为k的右斜树，它只有k个结点，却需要分配$2^k-1$个存储单元空间，这显然是对存储空间的浪费，所以，顺序存储结构一般只用于完全二叉树。所以，顺序存储结构一般只用于完全二叉树。</p>
+<h4 id="二叉树链式存储结构"><a href="#二叉树链式存储结构" class="headerlink" title="二叉树链式存储结构"></a>二叉树链式存储结构</h4><p>二叉树每个结点最多有两个孩子，所以为每个结点设计一个数据域和两个指针域，称这样的链表叫做二叉链表。</p>
+<h4 id="二叉树的遍历"><a href="#二叉树的遍历" class="headerlink" title="二叉树的遍历"></a>二叉树的遍历</h4><blockquote>
+<p>二叉树的遍历是指从根结点出发，按照某种次序依次访问二叉树中所有结点，使得每个结点被访问一次且仅被访问一次。</p>
+</blockquote>
+<p>两个关键词：访问和次序。访问是要根据实际的需要来确定具体做什么，比如对每个结点进行相关计算，输出打印等，算作是一个抽象操作。次序可分为前序、中序、后续、层序。</p>
+<h5 id="1-前序遍历"><a href="#1-前序遍历" class="headerlink" title="1. 前序遍历"></a>1. 前序遍历</h5><p>规则是若二叉树为空，则空操作返回，否则<strong>先访问根结点，然后前序遍历左子树，再前序遍历右子树</strong>。</p>
+<h5 id="2-中序遍历"><a href="#2-中序遍历" class="headerlink" title="2. 中序遍历"></a>2. 中序遍历</h5><p>则是若树为空，则空操作返回，否则从根结点开始，<strong>中序遍历根结点的左子树，然后是访问根结点，最后中序遍历右子树</strong>。</p>
+<h5 id="3-后序遍历"><a href="#3-后序遍历" class="headerlink" title="3. 后序遍历"></a>3. 后序遍历</h5><p>规则是若树为空，则空操作返回，否则<strong>从左到右先叶子后结点的方式遍历访问左右子树，最后是访问根结点</strong>。</p>
+<h5 id="三种遍历的总结比较"><a href="#三种遍历的总结比较" class="headerlink" title="三种遍历的总结比较"></a>三种遍历的总结比较</h5><p>对于每个结点，遍历指针会到达它三次，第一次：访问左子树之前到达一次，第二次：遍历完左子树之后回到这个结点到达一次，第三次：遍历完右子树之后回到这个结点到达一次。这三次可在每个结点上标注三个辅助点，第一次到达此结点，会使得第一个辅助点变色，第二次到达此结点，会使得第二个辅助点变色，第三次到达此结点，会使得第三个辅助点变色，三个辅助点全变色，往遍历指针父结点移动，如图所示：</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86.PNG" srcset="/img/loading.gif" lazyload alt="二叉树遍历"></p>
+<p>在哪个辅助点处访问结点，便是对应了三种遍历方式。如果在第一次到达此结点，就访问该结点，对应的就是前序遍历，如果在第二次到达此结点，访问该结点，对应的就是中序遍历，如果在第三次到达此结点，访问该结点，对应的就是后序遍历。</p>
+<p>二分搜索树的中序遍历返回的就是排序好的所有树结点值。前序遍历首个值必定是根节点，后续遍历中最后一个值必定是根节点。</p>
+<h5 id="三种遍历的关系"><a href="#三种遍历的关系" class="headerlink" title="三种遍历的关系"></a>三种遍历的关系</h5><p>题目：已知一棵二叉树的前序遍历序列为ABCDEF，中序遍历序列为CBAEDF，请问这棵二叉树的后序遍历结果是多少?</p>
+<p>三种遍历都是从根结点开始，前序遍历是先打印再递归左和右。所以前序遍历序列为ABCDEF，第一个字母是A被打印出来，就说明A是根结点的数据。再由中序遍历序列是CBAEDF，可以知道C和B是A的左子树的结点，E、D、F是A的右子树的结点。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E5%89%8D%E4%B8%AD%E6%8E%A8%E5%90%8E1.PNG" srcset="/img/loading.gif" lazyload alt="前中推后1"></p>
+<p>然后看前序中的C和B，它的顺序是A<strong>BC</strong>DEF，是先打印B后打印C，所以B应该是A 的左孩子，而C就只能是B的孩子，此时是左还是右孩子还不确定。再看中序序列是<strong>CB</strong>AEDF，C是在B的前面打印，也就说明C是B的左孩子，否则就是右孩子了。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E5%89%8D%E4%B8%AD%E6%8E%A8%E5%90%8E2.PNG" srcset="/img/loading.gif" lazyload alt="前中推后2"></p>
+<p>再看前序中的E、D、F，它的顺序是ABC<strong>DEF</strong>，那就意味着D是A结点的右孩子，E和F是D的子孙，注意，它们中有一个不一定是孩子，还有可能是孙子的。再来看中序序列是CBA<strong>EDF</strong> ，由于E在D的左侧，而F在右侧，所以可以确定E是D的左孩子，F是D的右孩子。因此最终得到的二叉树如图所示</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E5%89%8D%E4%B8%AD%E6%8E%A8%E5%90%8E3.PNG" srcset="/img/loading.gif" lazyload alt="前中推后3"></p>
+<p>已经复原了二叉树，要获得它的后序遍历结果就十分容易，结果是CBEFDA。</p>
+<h5 id="二叉树遍历的性质"><a href="#二叉树遍历的性质" class="headerlink" title="二叉树遍历的性质"></a>二叉树遍历的性质</h5><ul>
+<li>己知前序遍历序列和中序遍历序列，可以唯一确定一棵二叉树。</li>
+<li>已知后序遍历序列和中序遍历序列，可以唯一确定一棵二叉树。</li>
+<li>已知前序和后序遍历，不能确定一棵二叉树，会有多种可能。</li>
+</ul>
+<h5 id="4-层序遍历"><a href="#4-层序遍历" class="headerlink" title="4. 层序遍历"></a>4. 层序遍历</h5><p>规则是若树为空，则空操作返回，否则从树的第一层，也就是根结点开始访问，从上而下逐层遍历，在同一层中，按从左到右的颇用才结点逐个访问。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E4%BA%8C%E5%8F%89%E6%A0%91%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86.PNG" srcset="/img/loading.gif" lazyload alt="二叉树层序遍历"></p>
+<h4 id="二分搜索树-BST"><a href="#二分搜索树-BST" class="headerlink" title="二分搜索树(BST)"></a>二分搜索树(BST)</h4><blockquote>
+<p>又称为二叉排序树，二叉查找树，为了提高查找和插入元素的速度的数据结构</p>
+</blockquote>
+<h5 id="二分搜索树的性质"><a href="#二分搜索树的性质" class="headerlink" title="二分搜索树的性质"></a>二分搜索树的性质</h5><ul>
+<li>若它的左子树不空，则左子树上所有结点的值均小于它的根结点的值</li>
+<li>若它的右子树不空，则右子树上所有结点的值均大于它的根结点的值</li>
+<li>它的左、右子树也分别为二分搜索树</li>
+</ul>
+<p><img src="http://qiniu.chenxii.cn/ds/%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2%E6%A0%91.PNG" srcset="/img/loading.gif" lazyload alt="二分搜索树"></p>
+<blockquote>
+<p>根据二分搜索树的性质可得，二分搜索树的中序遍历得到的结果，就是对所有元素排序的结果</p>
+</blockquote>
+<h5 id="二分搜索树删除元素"><a href="#二分搜索树删除元素" class="headerlink" title="二分搜索树删除元素"></a>二分搜索树删除元素</h5><p><strong>删除最小(大)元素</strong>：如果根节点不为空，则一直向左(右)孩子结点移动，直到左(右)孩子节点为空，此结点对应就是BST的最小(大)值(该结点不一定是叶子结点)。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/BST%E6%9C%80%E5%B0%8F%E5%80%BC.PNG" srcset="/img/loading.gif" lazyload alt="BST最小值"></p>
+<p>接下来对该结点进行删除，如果最小(大)元素所在结点是叶子结点，那么直接删除；如果最小(大)元素所在结点不是叶子结点，即还有右(左)子树，此时删除此结点后还要将右(左)子树的根节点替换到原来最小(大)元素所在位置。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/BST%E5%88%A0%E9%99%A4%E6%9C%80%E5%B0%8F%E5%80%BC.PNG" srcset="/img/loading.gif" lazyload alt="BST删除最小值"><img src="http://qiniu.chenxii.cn/ds/BST%E5%88%A0%E9%99%A4%E6%9C%80%E5%B0%8F%E5%80%BC%E5%90%8E.PNG" srcset="/img/loading.gif" lazyload alt="BST删除最小值后"></p>
+<p><strong>删除任意元素</strong>：</p>
+<ul>
+<li>删除只有左(右)孩子的结点：删除此结点后，将左(右)孩子对应的子树替换要删除的元素的结点位置。</li>
+</ul>
+<p><img src="http://qiniu.chenxii.cn/ds/%E5%88%A0%E9%99%A4%E5%B7%A6%E5%AD%A9%E5%AD%90.PNG" srcset="/img/loading.gif" lazyload alt="删除左孩子"></p>
+<ul>
+<li>删除既有左孩子也有有孩子的结点：删除此结点后，将右子树中的最小值对应的结点取出(即右子树一直向左结点移动)，替换要删除元素的结点位置，并在右子树中删除此最小值元素。</li>
+</ul>
+<p><img src="http://qiniu.chenxii.cn/ds/%E5%88%A0%E9%99%A4%E4%BB%BB%E6%84%8F%E5%85%83%E7%B4%A0.PNG" srcset="/img/loading.gif" lazyload alt="删除任意元素"></p>
+<h4 id="平衡二叉树-AVL"><a href="#平衡二叉树-AVL" class="headerlink" title="平衡二叉树(AVL)"></a>平衡二叉树(AVL)</h4><blockquote>
+<p>平衡二叉树是一种二分搜索树，其中每一个节点的左子树和右子树的高度差至多为1</p>
+</blockquote>
+<p>AVL树可能它是一棵空树，或者它的左子树和右子树都是平衡二叉树，且左子树和右子树的深度之差的绝对值不超过1。将二叉树上结点的左子树深度减去右子树深度的值称为平衡因子BF，AVL树的平衡因子大小只能为-1,0,1。 </p>
+<h5 id="平衡二叉树的平衡性保持"><a href="#平衡二叉树的平衡性保持" class="headerlink" title="平衡二叉树的平衡性保持"></a>平衡二叉树的平衡性保持</h5><p><strong>维护平衡的时机</strong>：在一棵AVL树中添加或者删除元素时，可能导致某一结点的平衡因子绝对值大于1，此时需要维护平衡性。</p>
+<p><strong>维护平衡的方法</strong>：旋转操作。</p>
+<p>LL右旋转：插入的元素在不平衡结点的左侧的左侧(LL)，此时进行右旋转。此时在某个节点的平衡因子大于1，并且左子树的平衡因子大于等于0，此时使用右旋转。在y处的平衡因子大于1，对于二分搜索树来说，元素的大小关系满足：T1&lt;z&lt;T2&lt;x&lt;T3&lt;y&lt;T4。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E5%8F%B3%E6%97%8B%E8%BD%AC1.PNG" srcset="/img/loading.gif" lazyload alt="右旋转1"></p>
+<p>根据此大小关系，进行旋转操作，来保持平衡性，而且要维护元素间的大小关系。先根据不平衡结点y的右手边元素x为旋转中心，先取出T3子树，使得y绕着x做顺时针旋转，顺时针方向从x的角度来看就是向右旋转，从而使得y及其右子树成为x的右子树，再将T3拼接到y的左子树上，完成了平衡关系的同时，又维护了大小关系。</p>
+<p>RR左旋转：插入的元素在不平衡结点的右侧的右侧(RR)。此时在某个结点平衡因子小于-1，并且右侧平衡树的平衡因子小于等于0，则左旋转。先取出x的左子树，然后让y绕着x左旋转，成为x的左子树，然后拼接x的左子树到y的右子树上</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E5%B7%A6%E6%97%8B%E8%BD%AC.PNG" srcset="/img/loading.gif" lazyload alt="左旋转"></p>
+<p>LR左+右旋转：插入的元素在不平衡结点的左侧的右侧(RR)。此时在某个节点的平衡因子大于1，并且左子树的平衡因子小于0，此时使用LR策略。则应先对不平衡因子所在结点的左结点x绕着其右结点z进行左旋转，此时就转换成了LL的形状，再进行y的右旋转即可。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/LR.PNG" srcset="/img/loading.gif" lazyload alt="LR"><img src="http://qiniu.chenxii.cn/ds/LR2.PNG" srcset="/img/loading.gif" lazyload alt="LR2"></p>
+<p>RL右+左旋转：插入的元素在不平衡结点的右侧的左侧(RL)。此时在某个节点的平衡因子小于-1，并且左子树的平衡因子大于0，此时使用RL策略。则应先对不平衡因子所在结点的右结点x绕着其左结点z进行右旋转，此时就转换成了RR的形状，在进行y的左旋转即可。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/RL.PNG" srcset="/img/loading.gif" lazyload alt="RL"><img src="http://qiniu.chenxii.cn/ds/Rl2.PNG" srcset="/img/loading.gif" lazyload alt="Rl2"></p>
+<h4 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h4><blockquote>
+<p>二叉堆是一棵完全二叉树，并且最大堆结点中的值总是不大于其父结点的值，最小堆结点中的值总是不小于其父结点的值</p>
+</blockquote>
+<h5 id="在最大堆中添加元素"><a href="#在最大堆中添加元素" class="headerlink" title="在最大堆中添加元素"></a>在最大堆中添加元素</h5><p>Step1：先将元素添加在完全二叉树最下面一层的最右端，如果最右端没有位置，新加一层。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E6%9C%80%E5%A4%A7%E5%A0%86%E6%B7%BB%E5%8A%A0%E5%85%83%E7%B4%A01.PNG" srcset="/img/loading.gif" lazyload alt="最大堆添加元素1"></p>
+<p>Step2：然后从添加的元素开始，依次和它的父亲结点做比较，若比父亲结点值大，做上浮操作，和父亲结点对换，接着再次比较新的父亲结点，直到比父亲结点小的时候，停止上浮，返回一个添加完元素的二叉堆。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E6%9C%80%E5%A4%A7%E5%A0%86%E6%B7%BB%E5%8A%A0%E5%85%83%E7%B4%A02.PNG" srcset="/img/loading.gif" lazyload alt="最大堆添加元素2"><img src="http://qiniu.chenxii.cn/ds/%E6%9C%80%E5%A4%A7%E5%A0%86%E6%B7%BB%E5%8A%A0%E5%85%83%E7%B4%A03.PNG" srcset="/img/loading.gif" lazyload alt="最大堆添加元素3"></p>
+<p>最小堆的操作同理。</p>
+<p>时间复杂度O(logN)</p>
+<h5 id="在最大堆中取出元素"><a href="#在最大堆中取出元素" class="headerlink" title="在最大堆中取出元素"></a>在最大堆中取出元素</h5><p>从最大堆中取出元素只能取出最大元素，即堆顶的元素。</p>
+<p>Step1：取出堆顶元素，然后将堆最后一层最后一个元素取出，放在堆顶。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E6%9C%80%E5%A4%A7%E5%A0%86%E5%8F%96%E5%87%BA%E5%85%83%E7%B4%A01.PNG" srcset="/img/loading.gif" lazyload alt="最大堆取出元素1"><img src="http://qiniu.chenxii.cn/ds/%E6%9C%80%E5%A4%A7%E5%A0%86%E5%8F%96%E5%87%BA%E5%85%83%E7%B4%A02.PNG" srcset="/img/loading.gif" lazyload alt="最大堆取出元素2"></p>
+<p>Step2：此时仍然满足完全二叉树，但是不满足最大堆性质，此时进行下沉操作。首先替换后的堆顶元素与两个孩子孩子结点进行比较，和其中值较大的孩子结点进行交换。然后重复地和孩子结点进行比较，和其中较大的孩子结点交换，直至比孩子结点都大或者到达叶子结点。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E6%9C%80%E5%A4%A7%E5%A0%86%E5%8F%96%E5%87%BA%E5%85%83%E7%B4%A03.PNG" srcset="/img/loading.gif" lazyload alt="最大堆取出元素3"><img src="http://qiniu.chenxii.cn/ds/%E6%9C%80%E5%A4%A7%E5%A0%86%E5%8F%96%E5%87%BA%E5%85%83%E7%B4%A04.PNG" srcset="/img/loading.gif" lazyload alt="最大堆取出元素4"></p>
+<p>时间复杂度O(logN)</p>
+<h5 id="在堆中替换元素"><a href="#在堆中替换元素" class="headerlink" title="在堆中替换元素"></a>在堆中替换元素</h5><p>在最大堆中取出元素后，放入一个新元素，实现时可将堆顶元素直接替换，然后再进行下沉操作。</p>
+<h5 id="Heapify操作"><a href="#Heapify操作" class="headerlink" title="Heapify操作"></a>Heapify操作</h5><p>Heapify指的是将任意数组整理成堆的形状。</p>
+<p>Step1：先将数组当前状态看做一个完全二叉树，但是一般不满足堆的排序性质。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/Heapify.PNG" srcset="/img/loading.gif" lazyload alt="Heapify"></p>
+<p>Step2：从倒数第二层的结点开始进行下沉操作，然后依次对倒数第三层…直至根节点，全部进行下沉操作。</p>
+<p>算法时间复杂度是O(N)，另一种实现是将数组元素一个个插入一个空堆中，时间复杂度是O(NlogN)</p>
+<h4 id="线段树"><a href="#线段树" class="headerlink" title="线段树"></a>线段树</h4><blockquote>
+<p>线段树是一棵二叉树，每一个结点上都是表示的一个区间内相应的信息</p>
+</blockquote>
+<p>对于给定区间，线段树可方便更新取件中一个元素或者一个区间的值，方便查询一个区间的最大值，最小值或者区间数字和等数据。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E7%BA%BF%E6%AE%B5%E6%A0%91.PNG" srcset="/img/loading.gif" lazyload alt="线段树"></p>
+<h5 id="线段树的性质"><a href="#线段树的性质" class="headerlink" title="线段树的性质"></a>线段树的性质</h5><ul>
+<li>线段树不一定是完全二叉树</li>
+<li>线段树是平衡二叉树</li>
+<li>N个元素需要开辟4N空间大小来存储线段树</li>
+</ul>
+<p><img src="http://qiniu.chenxii.cn/ds/%E7%BA%BF%E6%AE%B5%E6%A0%91%E6%80%A7%E8%B4%A8.PNG" srcset="/img/loading.gif" lazyload alt="线段树性质"></p>
+<h5 id="线段树的查询"><a href="#线段树的查询" class="headerlink" title="线段树的查询"></a>线段树的查询</h5><p>因为左右子树结点都是从当前结点区间的中间分隔开来，所以给定查找区间后，找对应的子区间分别再去查询，时间复杂度O(logN)。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E7%BA%BF%E6%AE%B5%E6%A0%91%E6%9F%A5%E8%AF%A21.PNG" srcset="/img/loading.gif" lazyload alt="线段树查询1"></p>
+<p>在图中查找[2, 5]区间，从根结点开始一级一级向下分割子区间查找，于是在根结点左孩子中查询[2, 3]，在右孩子中查询[4, 5]。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E7%BA%BF%E6%AE%B5%E6%A0%91%E6%9F%A5%E8%AF%A2%E5%85%83%E7%B4%A02.PNG" srcset="/img/loading.gif" lazyload alt="线段树查询元素2"></p>
+<p>然后再递归地向下寻找，直至区间完全符合，停止查询，并将结果组合。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E7%BA%BF%E6%AE%B5%E6%A0%91%E6%9F%A5%E8%AF%A23.PNG" srcset="/img/loading.gif" lazyload alt="线段树查询3"></p>
+<h4 id="字典树"><a href="#字典树" class="headerlink" title="字典树"></a>字典树</h4><blockquote>
+<p>字典树(Trie)是一个多叉树，专门为处理字符串所设计，查询每个条目的时间复杂度和字典中条目数无关，只和字符串长度有关，时间复杂度是O(w)(w为字符串长度)</p>
+</blockquote>
+<p><img src="http://qiniu.chenxii.cn/ds/Trie%E7%BB%93%E6%9E%84.PNG" srcset="/img/loading.gif" lazyload alt="Trie结构"></p>
+<h5 id="字典树的结点"><a href="#字典树的结点" class="headerlink" title="字典树的结点"></a>字典树的结点</h5><p>每个结点存放一组映射，键是边上的字符，值对应是字符对应的下一层结点；结点上还存放一个布尔值，判断此结点是否是一个单词的结尾。</p>
+<h4 id="并查集"><a href="#并查集" class="headerlink" title="并查集"></a>并查集</h4><p>在并查集内部存储一系列元素，及每个元素对应一个集合编号。集合编号相同的元素认为是一个相同的集合，集合编号不同认为属于不同的集合。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E5%B9%B6%E6%9F%A5%E9%9B%86.PNG" srcset="/img/loading.gif" lazyload alt="并查集"></p>
+<h5 id="并查集常用操作"><a href="#并查集常用操作" class="headerlink" title="并查集常用操作"></a>并查集常用操作</h5><p>Find：查询元素对应所属的集合编号。</p>
+<p>Union：合并对应元素所在的两个集合为一个集合(如果两个元素集合不一样)</p>
+<h5 id="QuickFind"><a href="#QuickFind" class="headerlink" title="QuickFind"></a>QuickFind</h5><p>使用数组结构形成的并查集，Find操作的时间复杂度为O(1)，Union的操作为O(N)</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E5%B9%B6%E6%9F%A5%E9%9B%86QF.PNG" srcset="/img/loading.gif" lazyload alt="并查集QF"></p>
+<h5 id="QuickUnion"><a href="#QuickUnion" class="headerlink" title="QuickUnion"></a>QuickUnion</h5><p>将每个元素看成一个结点，并且每个结点是由孩子指向父亲，指向的元素是一个集合当中，当某个元素自己指向自己时，对应的集合号就是这个树对应的集合号。Union两个元素时，将对应的树结构的根节点链接到合并到的树结构的根结点上，并指向它，图中便是Union(9, 4)和Union(6, 2)。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E5%B9%B6%E6%9F%A5%E9%9B%86QU.PNG" srcset="/img/loading.gif" lazyload alt="并查集QU"><img src="http://qiniu.chenxii.cn/ds/%E5%B9%B6%E6%9F%A5%E9%9B%86QU2.PNG" srcset="/img/loading.gif" lazyload alt="并查集QU2"></p>
+<h5 id="基于size的优化"><a href="#基于size的优化" class="headerlink" title="基于size的优化"></a>基于size的优化</h5><blockquote>
+<p>优化的目的是希望合并两棵树后，不希望新的树的高度每次都增加</p>
+</blockquote>
+<p>在合并时，如果不对树的形状进行判断，会不断增加树的高度，甚至导致形成链表，图中就是Union(0, 1)，Union(1, 2)，Union(2, 3)之后形成的链表。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E5%B9%B6%E6%9F%A5%E9%9B%86size%E4%BC%98%E5%8C%961.PNG" srcset="/img/loading.gif" lazyload alt="并查集size优化1"></p>
+<p>此时Union时考虑size大小，不再仅考虑将Union(a, b)前一个元素a所在树合并到b中，考虑a和b谁的size小，将size小的合并到大的上面去，如图便是Union(4, 9)，不再是将4所在的根节点8合并到9上，而是将9合并到4根节点8上。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E5%B9%B6%E6%9F%A5%E9%9B%86size%E4%BC%98%E5%8C%962.PNG" srcset="/img/loading.gif" lazyload alt="并查集size优化2"></p>
+<h5 id="基于rank的优化"><a href="#基于rank的优化" class="headerlink" title="基于rank的优化"></a>基于rank的优化</h5><p>基于rank优化是基于size优化更深一步优化，不在仅考虑size大小，而是考虑深度大小，如图若Union(4, 2)的话，基于size会将8结点连接到7结点，此时树的深度为4。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E5%B9%B6%E6%9F%A5%E9%9B%86rank%E4%BC%98%E5%8C%961.PNG" srcset="/img/loading.gif" lazyload alt="并查集rank优化1"></p>
+<p>若是根据深度rank进行优化，则需要将7合并到8结点上，此时树的深度仍然为3。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E5%B9%B6%E6%9F%A5%E9%9B%86%E5%9F%BA%E4%BA%8Erank2.PNG" srcset="/img/loading.gif" lazyload alt="并查集基于rank2"></p>
+<h5 id="路径压缩"><a href="#路径压缩" class="headerlink" title="路径压缩"></a>路径压缩</h5><p>图中三种结构表示的并查集结果是相同的，但是由于结构不同，Find和Union的效率不同，路径压缩解决的是让一棵树结构的高度降低。</p>
+<p><img src="/" srcset="/img/loading.gif" lazyload alt="并查集路径压缩1"></p>
+<p>具体执行时，是让一个结点不再指向其父结点，而是指向其父结点的父结点，图中对4先进行压缩，连接到2上，然后对2进行压缩，连接到0上，整棵树高度从5变为了3。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E8%B7%AF%E5%BE%84%E5%8E%8B%E7%BC%A91.PNG" srcset="/img/loading.gif" lazyload alt="路径压缩1"><img src="http://qiniu.chenxii.cn/ds/%E8%B7%AF%E5%BE%84%E5%8E%8B%E7%BC%A92.PNG" srcset="/img/loading.gif" lazyload alt="路径压缩2"><img src="http://qiniu.chenxii.cn/ds/%E8%B7%AF%E5%BE%84%E5%8E%8B%E7%BC%A93.PNG" srcset="/img/loading.gif" lazyload alt="路径压缩3"></p>
+<h4 id="多路查找树"><a href="#多路查找树" class="headerlink" title="多路查找树"></a>多路查找树</h4><p>多路查找树每一个结点的孩子数可以多于两个，且每一个结点处可以存储多个元素。由于是查找树，所有元素之问存在某种特定的排序关系。</p>
+<h4 id="2-3树"><a href="#2-3树" class="headerlink" title="2-3树"></a>2-3树</h4><blockquote>
+<p> 2-3树是一棵多路查找树，其每一个结点都具有两个孩子(称为2结点)或三个孩子(称为3 结点) 。</p>
+</blockquote>
+<p><strong>2结点</strong>：一个2结点包含一个元素和两个孩子(或没有孩子) ，且与二分搜索树类似，左子树包含的元素小子该元素，右子树包含的元素大于该元素。与二叉排序树不同的是，2 结点要么没有孩子，要么有两个，不能只有一个孩子。</p>
+<p><strong>3结点</strong>：一个3 结点包含一小一大两个元素和三个孩子(或没有孩子) ，一个3结点要么没有孩子，要么具有3个孩子。如果某个3结点有孩子的话，左子树包含小于较小元素的元素，右子树包含大于较大元素的元素，中间子树包含介于两元素之间的元素。</p>
+<p>2-3树中所有的叶子都在同一层次上。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/2-3%E6%A0%91.PNG" srcset="/img/loading.gif" lazyload alt="2-3树"></p>
+<h5 id="2-3树的插入"><a href="#2-3树的插入" class="headerlink" title="2-3树的插入"></a>2-3树的插入</h5><p>2-3树的插入可分为3种情况：</p>
+<ol>
+<li>对于空树，插入元素到一个2结点即可。</li>
+<li>插入元素到一个2结点的叶子上。由于其本身就只有一个元素，所以只需要将其升级为3结点即可。</li>
+<li>在3结点中插入一个新元素。因为3结点本身已经是2-3树的结点最大容量(已经有两个元素) ，因此就需要将其拆分，且将树中两元素或插入元素的三者中选择其一向上移动一层。</li>
+</ol>
+<p>第3种情况的举例：</p>
+<p>第一种情况，需要向左图中插入元素5，经过遍历可得到元素5比8小比4大，因此需要插入在拥有6、7元素的3 结点位置。但6和7结点已经是3结点，不能再加元素。此时发现6,7结点的父亲结点4是个2结点，因此考虑让4结点升级为3结点，这样包就得有三个孩子，于是就想到，将6、7 结点拆分，让6与4结成3结点，将5成为中间孩子，将7成为右孩子，最终形成右图样子。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/2-3%E6%A0%91%E6%8F%92%E5%85%A51.PNG" srcset="/img/loading.gif" lazyload alt="2-3树插入1"></p>
+<p>第二种情况，需要向左图中插入元素11，经过遍历可得到元素11比12 、14小、比9 、10大，因此需要插入在拥有9、10元素的3结点位置。同理，9和10结点不能再增加结点。此时9,10结点父亲结点12、14也是一个3结点，也不能再插入元素了。再往上看，12、14结点的父亲结点，结点8是个2结点。于是，将9、10拆分，12、14也拆分，让根结点8升级为3结点，最终形成右图样子。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/2-3%E6%A0%91%E6%8F%92%E5%85%A52.PNG" srcset="/img/loading.gif" lazyload alt="2-3树插入2"></p>
+<p>第三种情况，需要在左图中插入元素2，经过遍历可得到元素2比4小、6比1大，因此是插入在拥有1、3元素的3结点位置。发现，1、3结点，4、6结点都是3 结点，都不能再插入元素了，再往上看，8、12结点还是一个3 结点，那就意味着，当前树结构是三层已经不能满足当前结点增加的需要。于是将1、3拆卦，4、6拆分，根结点8、12 也拆分，最终形成右图样子。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/2-3%E6%A0%91%E6%8F%92%E5%85%A53.PNG" srcset="/img/loading.gif" lazyload alt="2-3树插入3"></p>
+<h5 id="2-3树的删除"><a href="#2-3树的删除" class="headerlink" title="2-3树的删除"></a>2-3树的删除</h5><p>第一种情况：所删除元素位于一个3结点的叶子结点上，只需要在该结点处删除该元素即可，不会影响到整棵树的其他结点结构。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/2-3%E6%A0%91%E5%88%A0%E9%99%A41.PNG" srcset="/img/loading.gif" lazyload alt="2-3树删除1"></p>
+<p>第二种情况：所删除的元素位于一个2结点上，即要删除的是一个只有一个元素的结点。此时分四种情况来处理：</p>
+<ol>
+<li>此结点的父亲也是2结点，且拥有一个3结点的右孩子。删除结点1，只需要左旋，即6成为父亲结点，4成为6的左孩子，7是6的右孩子。</li>
+</ol>
+<p><img src="http://qiniu.chenxii.cn/ds/2-3%E6%A0%91%E5%88%A0%E9%99%A42-1.PNG" srcset="/img/loading.gif" lazyload alt="2-3树删除2-1"></p>
+<ol start="2">
+<li>此结点的父亲结点是2结点，父亲结点右孩子也是2结点。此时删除结点4，如果直接左旋会造成没有右孩子，因此需要对整棵树变形，让结点7 变成3 结点，让比7稍大的元素8下来，随即让比元素8稍大的元素9补充结点8的位置，于是就有中间图，再用左旋的方式，变成右图结果。</li>
+</ol>
+<p><img src="http://qiniu.chenxii.cn/ds/2-3%E6%A0%91%E5%88%A0%E9%99%A42-2.PNG" srcset="/img/loading.gif" lazyload alt="2-3树删除2-2"></p>
+<ol start="3">
+<li>此结点的父亲结点是一个3结点。此时删除结点10，意味着父亲结点12、14这个结点不能再成为3结点，于是将此结点拆分，并将12与13合并成为左孩子。</li>
+</ol>
+<p><img src="http://qiniu.chenxii.cn/ds/2-3%E6%A0%91%E5%88%A0%E9%99%A42-3.PNG" srcset="/img/loading.gif" lazyload alt="2-3树删除2-3"></p>
+<ol start="4">
+<li>如果当前树是一个满二叉树的情况，此时删除任何一个叶子都会使得整棵树不能满足2-3树的定义。删除叶子结点8时(删除任何一个结点都一样) ，就不得不考虑要将2-3 的层数减少，于是将8的父亲和其左子树6合并为一个3结点，再将14与9合并为3结点，最后成为右图的样子。</li>
+</ol>
+<p><img src="http://qiniu.chenxii.cn/ds/2-3%E6%A0%91%E5%88%A0%E9%99%A42-4.PNG" srcset="/img/loading.gif" lazyload alt="2-3树删除2-4"></p>
+<p>第三种情况：所删除的元素位于非叶子的分支结点。此时通常是将树按中序遍历后得到此元素的前驱或后继元素，考虑让此元素来补位即可。</p>
+<p>若要删除的分支结点是2结点。如图所示要删除4结点，它的前驱是1后继是6，由于6、7是3结点，只需要用6 来补位即可。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/2-3%E5%88%A0%E9%99%A43-1.PNG" srcset="/img/loading.gif" lazyload alt="2-3删除3-1"></p>
+<p>如果我们要删除的分支结点是3结点的某一元素，如图所示要删除12、14结点的12 ，应该将是3结点的左孩子的10 上升到删除位置。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/2-3%E5%88%A0%E9%99%A43-2.PNG" srcset="/img/loading.gif" lazyload alt="2-3删除3-2"></p>
+<h4 id="2-3-4树"><a href="#2-3-4树" class="headerlink" title="2-3-4树"></a>2-3-4树</h4><p>2-3-4树是2-3树的概念扩展，包括了4结点的使用。一个4结点包含小中大三个元素和四个孩子(或没有孩子) ，一个4结点要么没有孩子，要么具有4 个孩子。如果某个4结点有孩子的话，左子树包含小于最小元素的元素，第二子树包含大于最小元素，小于第二元素的元素，第三子树包含大于第二元素，小于最大元素的元素，右子树包含大于最大元素的元素。</p>
+<h4 id="B树"><a href="#B树" class="headerlink" title="B树"></a>B树</h4><blockquote>
+<p>B树是一种平衡的多路查找树，2-3树和2-3-4树都是B树的特例。数据结构B树就是为内外存的数据交互准备的</p>
+</blockquote>
+<p>结点最大的孩子数目称为B树的阶，因此，2-3树是3阶B树，2-3-4树是4阶B树。</p>
+<h5 id="B树的属性"><a href="#B树的属性" class="headerlink" title="B树的属性"></a>B树的属性</h5><ul>
+<li>如果根结点不是叶结点，则其至少有两棵子树。</li>
+<li>每一个非根的分支结点都有$k-1$个元素和$k$个孩子。</li>
+<li>所有叶子结点都位于同一层次。</li>
+<li>所有分支结点包含下列信息数据$(n,A_0,K_1,A_1,K_2,A_2,…,K_n,A_n)$，其中： $K_i<br>( i&#x3D;1,2,….,n)$为关键字，且$K_i&lt;K_{i+1}(i&#x3D;1, 2, 3,…,n-1)$；$A_i(i&#x3D;0,2,…,n)$为指向子树根结点的指针，且指针$A_{i-1}$所指子树中所有结点的关键字均小于$K_i$，$A_n$所指子树中所有结点的关键字均大于$K_n​$，n为关键字的个数(或n+1为子树的个数)。</li>
+</ul>
+<p><img src="http://qiniu.chenxii.cn/ds/B%E6%A0%91.PNG" srcset="/img/loading.gif" lazyload alt="B树"></p>
+<p>在B树上查找的过程是一个顺指针查找结点和在结点中查找关键字的交叉过程。</p>
+<h4 id="B-树"><a href="#B-树" class="headerlink" title="B+树"></a>B+树</h4><p>B树的缺点：在B树结构中，往返于每个结点之间也就意味着，必须得在硬盘的页面之间进行多次访问，假设每个结点都属于硬盘的不同页面，为了中序遍历所有的元素，页面2→页面1→页面3→页面1→页面4→页面1→页面5。而且每次经过结点遍历时，都会对结点中的元素进行一次遍历，这就非常低效。</p>
+<blockquote>
+<p>B+树解决了遍历时每个元素只访问一次</p>
+</blockquote>
+<p>B+树是应文件系统所需而出的一种B树的变形树，在B+树中，出现在分支结点中的元素会被当作在该分支结点位置的中序后继者(叶子结点)中再次列出。另外，每一个叶子结点都会保存一个指向后一叶子结点的指针。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/B+%E6%A0%91.PNG" srcset="/img/loading.gif" lazyload alt="B+树"></p>
+<h5 id="B-树和B树的区别"><a href="#B-树和B树的区别" class="headerlink" title="B+树和B树的区别"></a>B+树和B树的区别</h5><ul>
+<li>有n棵子树的结点中包含有n个关键字</li>
+<li>所有的叶子结点包含全部关键字的信息，及指向含这些关键字记录的指针，叶子结点本身依关键字的大小自小而大顺序链接</li>
+<li>所有分支结点可以看成是索引，结点中仅含有其子树中的最大(或最小)关键字。</li>
+</ul>
+<p>好处就在于，如果是要随机查找，就从根结点出发，与B树的查找方式相同，即使在分支结点找到了待查找的关键字，也只是用来索引，不能提供实际记录的访问，还是要到达包含此关键字的终端结点。如果是需要从最小关键字进行从小到大的顺序查找，就可以从最左侧的叶子结点出发，不经过分支结点，而是延着指向下一叶子的指针就可遍历所有的关键字。</p>
+<p>B+树的结构适合带有范围的查找。</p>
+<h4 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h4><blockquote>
+<p>红黑树和2-3树类似，将2-3树中3结点用颜色表示出来</p>
+</blockquote>
+<p><strong>红黑树和2-3树的等价性</strong>：</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E7%BA%A2%E9%BB%91%E6%A0%91%E5%92%8C2-3%E6%A0%91.PNG" srcset="/img/loading.gif" lazyload alt="红黑树和2-3树"></p>
+<p>所有的红色结点都是向左倾斜的。</p>
+<h5 id="红黑树的性质"><a href="#红黑树的性质" class="headerlink" title="红黑树的性质"></a>红黑树的性质</h5><ul>
+<li>每个结点不是红色的就是黑色的</li>
+<li>根节点是黑色的</li>
+<li>每一个叶子结点(指的是最后的空结点)是黑色的</li>
+<li>如果一个结点是红色的，那么它的孩子结点都是黑色的</li>
+<li>从任意一个结点到叶子结点，经过的黑色结点数是一样的</li>
+</ul>
+<p><img src="http://qiniu.chenxii.cn/ds/%E7%BA%A2%E9%BB%91%E6%A0%91%E5%92%8C2-3%E6%A0%912.PNG" srcset="/img/loading.gif" lazyload alt="红黑树和2-3树2"></p>
+<p>红黑树严格意义上不是平衡二叉树，是保持”黑平衡”的二叉树。</p>
+<p>红黑树最大高度：2logN，查询删除复杂度：O(logN)</p>
+<h3 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h3><blockquote>
+<p>集合(Set)是一个不能盛放重复元素的容器，能利用集合很快的进行去重操作</p>
+</blockquote>
+<h4 id="添加元素"><a href="#添加元素" class="headerlink" title="添加元素"></a>添加元素</h4><p>集合在添加元素时，不能存放已经存在于集合中的元素，对已经存在的元素进行不添加或者重合操作。</p>
+<h4 id="集合常用操作的时间复杂度"><a href="#集合常用操作的时间复杂度" class="headerlink" title="集合常用操作的时间复杂度"></a>集合常用操作的时间复杂度</h4><p>基于LinkedList实现的Set：</p>
+<p>增加元素：O(N)</p>
+<p>查询元素：O(N)</p>
+<p>删除元素：O(N)</p>
+<p>因为每次添加元素都要遍历一遍观察是否有重复，没有再添加，所以是O(N)</p>
+<p>基于二分搜索树实现的Set：</p>
+<p>添加元素：O(logN)</p>
+<p>查询元素：O(logN)</p>
+<p>删除元素：O(logN)</p>
+<p>此时和树的深度h有关，平均时间复杂度为O(logN)，最大为O(N)</p>
+<h3 id="映射"><a href="#映射" class="headerlink" title="映射"></a>映射</h3><blockquote>
+<p>映射(Map)是一种存储键(Key)和值(Value)数据对的数据结构，可以根据键寻找对应值</p>
+</blockquote>
+<h4 id="映射常用操作的时间复杂度"><a href="#映射常用操作的时间复杂度" class="headerlink" title="映射常用操作的时间复杂度"></a>映射常用操作的时间复杂度</h4><p>基于LinkedList实现的Map：</p>
+<p>增加元素：O(N)</p>
+<p>查询元素：O(N)</p>
+<p>删除元素：O(N)</p>
+<p>修改元素：O(N)</p>
+<p>因为每次添加元素都要遍历一遍观察是否有重复，没有再添加，所以是O(N)</p>
+<p>基于二分搜索树实现的Map：</p>
+<p>添加元素：O(logN)</p>
+<p>查询元素：O(logN)</p>
+<p>删除元素：O(logN)</p>
+<p>修改元素：O(N)</p>
+<p>此时和树的深度h有关，平均时间复杂度为O(logN)，最大为O(N)</p>
+<h4 id="有序映射和无序映射"><a href="#有序映射和无序映射" class="headerlink" title="有序映射和无序映射"></a>有序映射和无序映射</h4><p><strong>有序映射</strong>：指的键是有序的，一般利用二分搜索树来实现</p>
+<p><strong>无序映射</strong>：指的键是无序的，一般利用哈希表来实现</p>
+<h3 id="哈希表"><a href="#哈希表" class="headerlink" title="哈希表"></a>哈希表</h3><blockquote>
+<p>解决了查找某个key时必须进行比较才能查询到的弊端，只需要通过某个函数f，使得存储位置&#x3D;f (关键字)，就可以通过查找关键字而不需要比较就可获得需要的记录的存储位置</p>
+</blockquote>
+<p><strong>哈希函数</strong>：散列技术是在记录的存储位置和它的关键字之间建立一个确定的对应关系f，使得每个关键字key对应一个存储位置f (key) 。这种对应关系f称为散列函数，又称为哈希(Hash) 函数。</p>
+<p><strong>哈希表</strong>：采用散列技术将记录存储在一块连续的存储空间中，这块连续存储空间称为散列表或哈希表(Hash Table)。</p>
+<p>哈希表与线性表、树、图等结构不同的是，后面几种结构，数据元素之间都存在某种逻辑关系，可以用连线图示表示出来，而散列技术的记录之间不存在什么逻辑关系，它只与关键字有关联。因此，散列主要是面向查找的存储结构。散列技术最适合的求解问题是查找与给定值相等的记录。</p>
+<h4 id="哈希函数的设计"><a href="#哈希函数的设计" class="headerlink" title="哈希函数的设计"></a>哈希函数的设计</h4><h5 id="设计原则"><a href="#设计原则" class="headerlink" title="设计原则"></a>设计原则</h5><ul>
+<li>计算简单，哈希函数的计算时间不应该超过其他查找技术与关键字比较的时间。</li>
+<li>散列地址分布均匀，可以保证存储空间的有效利用，并减少为处理冲突而耗费的时间。</li>
+</ul>
+<h5 id="设计方法"><a href="#设计方法" class="headerlink" title="设计方法"></a>设计方法</h5><p><strong>直接定址法</strong>：取关键字的某个线性函数值为散列地址，即$f ( key ) &#x3D;a * key+b$(a、b 为常数)。</p>
+<p>特点：优点就是简单、均匀，也不会产生冲突，缺点是需要事先知道关键字的分布情况。</p>
+<p>适用场景：适合查找表较小且连续的情况，如作0~100 岁的人口数字统计表，可直接用年龄作为key。</p>
+<p><strong>数字分析法</strong>：抽取方法是使用关键字的一部分来计算散列存储位置的方法，这在散列函数中是常常用到的手段。</p>
+<p>适用场景：处理关键字位数比较大的情况，如果事先知道关键字的分布且关键字的若干位分布较均匀，就可以考虑用这个方法，如存储一系列手机号取后四位。</p>
+<p><strong>平方取中法</strong>：将关键字进行平方，取平方结果中间的k位作为散列地址。如关键字是1234，那么它的平方就是1522756，再抽取中间的3位就是227，用做散列地址。</p>
+<p>适用场景：不知道关键字的分布，而位数又不是很大的情况。</p>
+<p><strong>折叠法</strong>：将关键字从左到右分割成位数相等的几部分(注意最后一部分位数不够时可以短些)，然后将这几部分叠加求和，并按散列表表长，取后几位作为散列地址。如关键字是9876543210，散列表表长为三位，我们将它分为四组，987|654|321|0，然后将它们叠加求和987+654+321+0&#x3D;1962，再求后3位得到散列地址为962。有时可能这还不能够保证分布均匀，可从一端向另一端来回折叠后对齐相加。如将987和321反转，再与654 和0 相加，变成789+654+123+0&#x3D;1566，此时散列地址为566。</p>
+<p>适用场景：事先不需要知道关键字的分布，适合关键字位数较多的情况。</p>
+<p><strong>除留余数法</strong>：对于散列表长为m的散列函数公式为：$f ( key) &#x3D; key mod p (p\leq m)$，$mod$是取余数操作，不仅可以对关键宇直接取模，也可在折叠、平方取中后再取模。此方法为最常用的构造散列函数方法。此方法的关键就在于选择合适的p，p如果选得不好，就可能会容易产生同义词。</p>
+<p>因此根据经验，若散列表表长为m，通常p为小于或等于表长(最好接近m) 的最小质数或不包含小于20 质因子的合数。</p>
+<p><strong>随机数法</strong>：选择一个随机数，取关键字的随机函数值为它的散列地址。即$f (key)&#x3D;random (key ) $，$random​$是随机函数。</p>
+<p>适用场景：当关键字的长度不等时，采用这个方法构造散列函数是比较合适的。</p>
+<h4 id="处理哈希冲突"><a href="#处理哈希冲突" class="headerlink" title="处理哈希冲突"></a>处理哈希冲突</h4><p><strong>哈希冲突</strong>：两个关键字$key_1\neq key_2$，但是却有$f (key_1) &#x3D;f (key_2) $，这种现象我们称为哈希冲突，并把$key_1$和$key_2$ 称为这个哈希函数的同义词。</p>
+<h5 id="处理哈希冲突方法"><a href="#处理哈希冲突方法" class="headerlink" title="处理哈希冲突方法"></a>处理哈希冲突方法</h5><p><strong>开放定址法</strong>：一旦发生了冲突，就去寻找下一个空的散列地址，只要散列表足够大，空的散列地址总能找到，并将记录存入。</p>
+<p>解决冲突的开放定址法称为线性探测法，但会碰到不是同义词却需要争夺一个地址的情况，称这种现象为堆积。堆积的出现，使得我们需要不断处理冲突，无论是存入还是查找效率都会大大降低。</p>
+<p>公式是：$f_i( key ) &#x3D; ( f ( key ) +d_i) MOD m (d_i&#x3D;1,2,3,…,m-1)$。</p>
+<p>可在此基础上增加平方运算，目的是为了不让关键字都聚集在某一块区域，称这种方法为二次探测法。</p>
+<p>$f_i( key ) &#x3D; ( f ( key ) +d_i) MOD m  (d_i&#x3D;1,-1,4,-4,…,\pm q^2)​$，$q\leq m&#x2F;2​$。</p>
+<p>在冲突时，对于位移量d，采用随机函数计算得到，我们称之为随机探测法。</p>
+<p>公式是：$f_i( key ) &#x3D; ( f ( key ) +d_i) MOD m (d_i是一个随机数列)$。</p>
+<p><strong>再散列函数法</strong>：</p>
+<p>对于散列表来说，事先准备多个散列函数。</p>
+<p>公式为：$f_i ( key ) &#x3D;RH_i ( key) (1&#x3D;1 ,2,…,k)$，$RH_i$就是不同的散列函数，可以把除留余数、折叠、平<br>方取中全部用上。每当发生散到地址冲突时，换一个散列函数计算，总会有一个可以把冲突解决掉。</p>
+<p>特点：能够使得关键字不产生聚集，相应地也增加了计算的时间。</p>
+<p><strong>链地址法</strong>：将所有关键字为同义词的记录存储在一个单链表中，称这种表为同义词子表，在散列表中只存储所有同义词子表的头指针。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E9%93%BE%E5%9C%B0%E5%9D%80%E6%B3%95.PNG" srcset="/img/loading.gif" lazyload alt="链地址法"></p>
+<p>特点：链地址法对于可能会造成很多冲突的散列函数来说，提供了绝不会出现找不到地址的保障。同时也就带来了查找时需要遍历单链表的性能损耗。</p>
+<p><strong>公共溢出区法</strong>：为所有冲突的关键字建立一个公共的溢出区来存放，在查找时，对给定值通过散列函数计算出散列地址后，先与基本表的相应位置进行比对，如果相等，则查找成功；如果不相等，则到溢出表去进行顺序查找。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E5%85%AC%E5%85%B1%E6%BA%A2%E5%87%BA%E5%8C%BA%E6%B3%95.PNG" srcset="/img/loading.gif" lazyload alt="公共溢出区法"></p>
+<p>特点：相对于基本表而言，在有冲突的数据很少的情况下，公共溢出区的结构对查找性能来说是非常高的。</p>
+<h4 id="哈希表的查找"><a href="#哈希表的查找" class="headerlink" title="哈希表的查找"></a>哈希表的查找</h4><p>在存储时，通过散列函数计算记录的散列地址，并按此散列地址存储该记录。查找记录时，我们通过同样的散列函数计算记录的散列地址，按此散到地址访问该记录。故散列技术既是一种存储方法，也是一种查找方法。如果没有冲突，哈希表查找效率很高，时间复杂度为O(1)。</p>
+<p><strong>影响哈希表查找的主要因素</strong>：</p>
+<ul>
+<li>哈希函数是否均匀，哈希函数的好坏直接影响着出现冲突的频繁程度。</li>
+<li>处理冲突的方法，相同的关键字、相同的哈希函数，但处理冲突的方法不同，会使得平均查找长度不同。</li>
+<li>哈希表的装填因子，装填因子α&#x3D;填入表中的记录个数哈希表长度。α标志着哈希表的装满的程度。当填入表中的记录越多，α就越大，产生冲突的可能性就越大。哈希表的平均查找长度取决于装填因子，而不是取决于查找集合中的记录个数。不管记录个数n有多大，总可以选择一个合适的装填因子以便将平均查找长度限定在一个范围之内，此时我们散列查找的时间复杂度就是O(1) 。为了做到这一点，通常都是将哈希表的空间设置得比查找集合大，虽然是浪费了一定的空间，但换来的是查找效率的大大提升。</li>
+</ul>
+<h3 id="图"><a href="#图" class="headerlink" title="图"></a>图</h3><blockquote>
+<p>图(Graph)是由顶点的有穷非空集合和顶点之间边的集合组成，通常表示为：G(V, E)。其中，G 表示一个图，V 是图G中顶点的集合，E是图G中边的集合。</p>
+</blockquote>
+<h4 id="图结构常用术语"><a href="#图结构常用术语" class="headerlink" title="图结构常用术语"></a>图结构常用术语</h4><p><strong>顶点</strong>：图中的数据元素，称之为顶点，在图结构中，任意两个顶点之间都可能有关系，顶点之间的逻辑关系用边来表示，边集可以是空的。</p>
+<p><strong>无向边和无向图</strong>：若顶点$v_i$到$v_j$，之间的边没有方向，则称这条边为无向边，用无序偶对$(v_i，v_j)$ 来表示。如果图中任意两个顶点之间的边都是无向边，则称该图为无向图。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E6%97%A0%E5%90%91%E5%9B%BE.PNG" srcset="/img/loading.gif" lazyload alt="无向图"></p>
+<p><strong>有向边和有向图</strong>：若从顶点$v_i$到$v_j$的边有方向，则称这条边为有向边，也称为弧；用有序偶$&lt;v_i, v_j&gt;$来表示。$v_i$ 称为弧尾，$v_j$ 称为弧头。如果图中任意两个顶点之间的边都是有向边，则称该图为有向图。图中连接顶点A到D的有向边就是弧，A 是弧尾，D 是弧头，$&lt;A, D&gt;$表示弧。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E6%9C%89%E5%90%91%E5%9B%BE.PNG" srcset="/img/loading.gif" lazyload alt="有向图"></p>
+<p><strong>无向完全图</strong>：在无向图中，如果任意两个顶点之间都存在边，则称该图为无向完全图。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E6%97%A0%E5%90%91%E5%AE%8C%E5%85%A8%E5%9B%BE.PNG" srcset="/img/loading.gif" lazyload alt="无向完全图"></p>
+<p><strong>有向完全图</strong>：在有向国中，如果任意两个顶点之间都存在方向互为相反的两条弧，则称该图为有向完全图。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E6%9C%89%E5%90%91%E5%AE%8C%E5%85%A8%E5%9B%BE.PNG" srcset="/img/loading.gif" lazyload alt="有向完全图"></p>
+<blockquote>
+<p>结论：对于具有n个顶点和e条边数的图，无向图$0\leq e \leq n(n-1)&#x2F;2$ ，有向图$0\leq e \leq n(n-1)$。</p>
+</blockquote>
+<p><strong>权和网</strong>：有些图的边或弧具有与它相关的数字，这种与图的边或弧相关的数叫做权，这些权可以表示从一个顶点到另一个顶点的距离或耗费。这种带权的图通常称为网 。</p>
+<p><strong>度</strong>：对于无向图，顶点v的度是和v相关联的边的数目，记为$TD(v)$。边数是各顶点度数和的一半。</p>
+<p><strong>入度和出度</strong>：对于有向图，以顶点v为头的弧的数自称为v的入度，记为$ID(v)$，以v为尾的弧的数目称为v的出度，记为$OD(v)$。顶点v的度为$TD(v)&#x3D;ID(v)+OD(v)$。边数是各顶点出度数和或入度数和。</p>
+<p><strong>路径</strong>：对于无向图，从顶点v到顶点v&#39;的路径是一个顶点序列；对于有向图，路径是有向的，只能沿着弧方向移动。</p>
+<p><strong>路径长度</strong>：路径的长度是路径上的边或弧的数目。</p>
+<p><strong>回路</strong>：第一个顶点到最后一个顶点相同的路径称为回路或环。</p>
+<p><strong>简单路径和简单回路</strong>：序列中顶点不重复出现的路径称为简单路径，除了第一个顶点和最后一个顶点之外，其余顶点不重复出现的回路，称为简单回路或简单环。</p>
+<p><strong>连通图</strong>：在无向图G中，如果从顶点v到顶点v&#39;有路径，则称v和v&#39;是连通的。如果对于图中任意两个顶点$v_i$、$v_j$ ，$v_i$和$v_j$都是连通的，则称G是连通图。下图中左图不连通，右图连通。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E8%BF%9E%E9%80%9A%E5%9B%BE.PNG" srcset="/img/loading.gif" lazyload alt="连通图"></p>
+<p><strong>连通分量</strong>：无向图中的极大连通子图称为连通分量。</p>
+<p><strong>强连通图</strong>：在有向图G中，如果对于每一对$v_i$、$v_j$，且$v_i\neq v_j$，从$v_i$到$v_j$和从$v_j$到$v_i$都存在路径，则称G是强连通图。</p>
+<p><strong>强连通分量</strong>：有向图中的极大强连通子图称做有向图的强连通分量。</p>
+<p><strong>连通图的生成树</strong>：一个连通图的生成树是一个极小的连通子图，它含有图中全部的n个顶点，但只有足以构成一棵树的n-1条边。</p>
+<blockquote>
+<p>如果一个图有n个顶点和小于n-1条边，则是非连通图，如果图多于n-1条边，必定构成一个环，因为这条边使得它依附的那两个顶点之间有了第二条路径</p>
+</blockquote>
+<p><strong>有向树</strong>：如果一个有向图恰有一个顶点的入度为0，其余顶点的入度均为1，则是一棵有向树。</p>
+<h4 id="图的遍历"><a href="#图的遍历" class="headerlink" title="图的遍历"></a>图的遍历</h4><blockquote>
+<p>从图中某一顶点出发访遍图中其余顶点，且使每一个顶点仅被访问一次，这一过程就叫做图的遍历</p>
+</blockquote>
+<h5 id="深度优先遍历-DFS"><a href="#深度优先遍历-DFS" class="headerlink" title="深度优先遍历(DFS)"></a>深度优先遍历(DFS)</h5><p>对于连通图，从图中某个顶点v出发，访问此顶点，然后从v的未被访问的邻接点出发深度优先遍历图，直至图中所有和v有路径相通的顶点都被访问到。对于非连通图，只需要对它的连通分量分别进行深度优先遍历，即在先前一个顶点进行一次深度优先遍历后，若图中尚有顶点未被访问，则另选图中一个未曾被访问的顶点作起始点，重复上述过程，直至图中所有顶点都被访问到为止。</p>
+<p>图的深度优先遍历类似树的前序遍历。</p>
+<p>举例：首先从顶点A 开始，做上表示走过的记号后，面前有两条路，通向B和F，定一个原则，在没有碰到重复顶点的情况下，始终是向右手边走，于是走到了B 顶点。此时有三条分支，分别通向顶点C、I、G，右手通行原则，使得走到了C顶点。就这样，一直跟着右手通道走，一直走到F顶点。当依然选择右手通道走过去后，发现走回到顶点A，因为在这里做了记号表示已经走过。此时退回到顶点F，走向从右数的第二条通道，到了G顶点，它有三条通道，发现B和D都已经是走过的，于是走到H，当面对通向H的两条通道D和E时，会发现都已经走过了。此时可能还有很多分支的顶点没有走到，所以按原路返回。在顶点H处，再无通道没走过，返回到G，也无未走过通道，返回到F，没有通道，返回到E，有一条通道通往H 的通道，验证后也是走过的，再返回到顶点D，此时还有三条道未走过，其中H走过了，G走过了，I是一个新顶点，没有标记，标记下来。继续返回，直到返回顶点A ，确认已经完成遍历任务，找到了所有的9 个顶点。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E5%9B%BEDFS.PNG" srcset="/img/loading.gif" lazyload alt="图DFS"></p>
+<h5 id="广度优先遍历-BFS"><a href="#广度优先遍历-BFS" class="headerlink" title="广度优先遍历(BFS)"></a>广度优先遍历(BFS)</h5><p>图的广度优先遍历类似于树的层序遍历。</p>
+<p>举例：将DFS图稍微变形，变形原则是顶点A放置在最上第一层，让与它有边的顶点B、F为第二层，再让与B和F有边的顶点C、l、G、E为第三层，再将这四个顶点有边的D、H放在第四层，如图所示。此时在视觉上图的形状发生了变化，其实顶点和边的关系还是完全相同。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E5%9B%BEBFS.PNG" srcset="/img/loading.gif" lazyload alt="图BFS"></p>
+<h4 id="图的最小生成树"><a href="#图的最小生成树" class="headerlink" title="图的最小生成树"></a>图的最小生成树</h4><p>在网结构中的最小成本，就是n个顶点，用n-1条边把一个连通图连接起来，并且使得权值的和最小。把构造连通网的最小代价生成树称为最小生成树。</p>
+<h5 id="普里姆-Prim-算法"><a href="#普里姆-Prim-算法" class="headerlink" title="普里姆(Prim)算法"></a>普里姆(Prim)算法</h5><h5 id="克鲁斯卡尔-Kruskal-算法"><a href="#克鲁斯卡尔-Kruskal-算法" class="headerlink" title="克鲁斯卡尔(Kruskal)算法"></a>克鲁斯卡尔(Kruskal)算法</h5><h4 id="图的最短路径"><a href="#图的最短路径" class="headerlink" title="图的最短路径"></a>图的最短路径</h4><p>非网图没有边上的权值，最短路径就是指两顶点之间经过的边数最少的路径；对于网图来说，最短路径是指两顶点之间经过的边上权值之和最少的路径，并且称路径上的第一个顶点是源点，最后一个顶点是终点。</p>
+<h5 id="迪杰斯特拉-Dijkstra-算法"><a href="#迪杰斯特拉-Dijkstra-算法" class="headerlink" title="迪杰斯特拉(Dijkstra) 算法"></a>迪杰斯特拉(Dijkstra) 算法</h5><h5 id="弗洛伊德-Floyd-算法"><a href="#弗洛伊德-Floyd-算法" class="headerlink" title="弗洛伊德(Floyd)算法"></a>弗洛伊德(Floyd)算法</h5><h4 id="图的拓扑排序"><a href="#图的拓扑排序" class="headerlink" title="图的拓扑排序"></a>图的拓扑排序</h4><p><strong>AOV网</strong>：在一个表示工程的有向图中，用顶点表示活动，用弧表示活动之间的优先关系，这样的有向图为顶点表示活动的网，我们称为AOV网。</p>
+<p><strong>拓扑序列</strong>：设G&#x3D;(V,E)是一个具有n个顶点的有向图，V中的顶点序列$v_1$,$v2$, …,$v_n$，满足若从顶点$v_i$到$v_j$有一条路径，则在顶点序列中顶点$v_i$必在顶点$v_j$之前。则我们称这样的顶点序列为一个拓扑序列。</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E6%8B%93%E6%89%91%E5%BA%8F%E5%88%97.PNG" srcset="/img/loading.gif" lazyload alt="拓扑序列"></p>
+<p><strong>拓扑排序</strong>：是对一个有向圈构造拓扑序列的过程。</p>
+<h5 id="拓扑排序算法"><a href="#拓扑排序算法" class="headerlink" title="拓扑排序算法"></a>拓扑排序算法</h5><p>对AOV网进行拓扑排序的基本思路是：从AOV网中选择一个入度为0的顶点输出，然后删去此顶点，并删除以此顶点为尾的弧，继续重复此步骤，直到输出全部顶点或者AOV网中不存在入度为0的顶点为止。</p>
+<h4 id="图的关键路径"><a href="#图的关键路径" class="headerlink" title="图的关键路径"></a>图的关键路径</h4><p><strong>AOE网</strong>：在一个表示工程的带权有向图中，用顶点表示事件，用有向边表示活动，用边上的权值表示活动的持续<br>时间，这种有向图的边表示活动的网，我们称之为AOE网。AOE网中没有入边的顶点称为始点或源点，没有出边的顶点称为终点或汇点。</p>
+<p><strong>关键路径</strong>：路径上各个活动所持续的时间之和称为路径长度，从源点到汇点具有最大长度的路径叫关键路径，在关键路径上的活动叫关键活动。</p>
+<h3 id="数据结构常用操作复杂度汇总"><a href="#数据结构常用操作复杂度汇总" class="headerlink" title="数据结构常用操作复杂度汇总"></a>数据结构常用操作复杂度汇总</h3><h4 id="常见的时间复杂度所耗时间的大小排列"><a href="#常见的时间复杂度所耗时间的大小排列" class="headerlink" title="常见的时间复杂度所耗时间的大小排列"></a>常见的时间复杂度所耗时间的大小排列</h4><p>O($1$) &lt; O($logn$) &lt; O($n$) &lt; O($nlogn$) &lt; O($n^2$) &lt; O($n^3$) &lt; O($2^n$) &lt; O($n!$) &lt; O($n^n$)</p>
+<p><img src="http://qiniu.chenxii.cn/ds/%E5%A4%A7O%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6.PNG" srcset="/img/loading.gif" lazyload alt="大O时间复杂度"></p>
+<h4 id="数据结构常用操作复杂度汇总-1"><a href="#数据结构常用操作复杂度汇总-1" class="headerlink" title="数据结构常用操作复杂度汇总"></a>数据结构常用操作复杂度汇总</h4><p><img src="http://qiniu.chenxii.cn/ds/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E5%A4%8D%E6%9D%82%E5%BA%A6.PNG" srcset="/img/loading.gif" lazyload alt="数据结构常用操作复杂度"></p>
+<h4 id="各种排序算法的复杂度"><a href="#各种排序算法的复杂度" class="headerlink" title="各种排序算法的复杂度"></a>各种排序算法的复杂度</h4><p><img src="http://qiniu.chenxii.cn/ds/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E5%A4%8D%E6%9D%82%E5%BA%A6.PNG" srcset="/img/loading.gif" lazyload alt="排序算法复杂度"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="category-chain-item">数据结构与算法</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">#数据结构</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>数据结构</div>
+      <div>http://example.com/2019/02/14/D-DataStructureAndAlgorithm/A-DataStructure/base-data-structure/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>ChenXi</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年2月14日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/06/08/D-DataStructureAndAlgorithm/G-BigDataProcess/bigDataProcess/" title="海量数据处理">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">海量数据处理</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/02/05/D-DataStructureAndAlgorithm/B-BaseAlgorithm/MergeSort/" title="归并排序算法及其优化">
+                        <span class="hidden-mobile">归并排序算法及其优化</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

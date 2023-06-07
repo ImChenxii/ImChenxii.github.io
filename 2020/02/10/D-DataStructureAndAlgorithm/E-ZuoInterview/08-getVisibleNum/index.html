@@ -1,0 +1,674 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ChenXi">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="题目描述:一个不含有负数的数组可以代表一圈环形山，每个位置的值代表山的高度。比如，[3,1,2,4,5]、[4,5,3,1,2]或[1,2,4,5,3]都代表相同结构的环形山。3-&gt;1-&gt;2-&gt;4-&gt;5-&gt;3方向叫做next方向，3-&gt;5-&gt;4-&gt;2-&gt;1-&gt;3方向叫做last方向。山峰A和山峰B能够相互看见的条件为:  如果A和B是同一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="代码面试指南系列（八）：可见的山峰对数量">
+<meta property="og:url" content="http://example.com/2020/02/10/D-DataStructureAndAlgorithm/E-ZuoInterview/08-getVisibleNum/index.html">
+<meta property="og:site_name" content="陈曦の博客">
+<meta property="og:description" content="题目描述:一个不含有负数的数组可以代表一圈环形山，每个位置的值代表山的高度。比如，[3,1,2,4,5]、[4,5,3,1,2]或[1,2,4,5,3]都代表相同结构的环形山。3-&gt;1-&gt;2-&gt;4-&gt;5-&gt;3方向叫做next方向，3-&gt;5-&gt;4-&gt;2-&gt;1-&gt;3方向叫做last方向。山峰A和山峰B能够相互看见的条件为:  如果A和B是同一">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-02-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-07T00:28:32.739Z">
+<meta property="article:author" content="ChenXi">
+<meta property="article:tag" content="数据结构">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>代码面试指南系列（八）：可见的山峰对数量 - 陈曦の博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>陈曦の博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="代码面试指南系列（八）：可见的山峰对数量"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2020-02-10 00:00" pubdate>
+          2020年2月10日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          31 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">代码面试指南系列（八）：可见的山峰对数量</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述:"></a>题目描述:</h3><p>一个不含有负数的数组可以代表一圈环形山，每个位置的值代表山的高度。比如，[3,1,2,4,5]、[4,5,3,1,2]或[1,2,4,5,3]都代表相同结构的环形山。3-&gt;1-&gt;2-&gt;4-&gt;5-&gt;3方向叫做next方向，3-&gt;5-&gt;4-&gt;2-&gt;1-&gt;3方向叫做last方向。<br>山峰A和山峰B能够相互看见的条件为:</p>
+<ol>
+<li>如果A和B是同一座山，认为不能互相看见</li>
+<li>如果A和B是不同的山，并且在环中相邻，认为可以互相看见。</li>
+<li>如果A和B是不同的山，并且在环中不相邻，假设两座山高度的最小值为min。如果A通过next方向到B的途中没有比min大的山峰，或者A通过last方向到B的途中没有高度比min大的山峰，认为A和B可以互相看见。有一个能走通就认为可以相互看见。<br>给定一个没有负数且没有重复值的数组arr，返回有多少对山峰能够互相看见。</li>
+</ol>
+<h3 id="解法一-数学分析法"><a href="#解法一-数学分析法" class="headerlink" title="解法一: 数学分析法"></a>解法一: 数学分析法</h3><p>在寻找山峰对时，只用高度小的山峰去找高度大的山峰，而不会去用高度大的山峰去找高度小的山峰。然后从每个位置出发，都按照小找大原则找到山峰对的数量，就是总的可见山峰对的数量。<br>如果有i(i&gt;2)座山峰并且高度都不一样，必然在环中存在唯一的最大值和唯一的次大值，用x表示除最大值和次大值外的任何一座山峰，因为x既不是最大值，也不是次大值，所以x在last方向上必存在第一个高度比它大的节点，设这个节点是y(y可能是最&#x2F;次大值节点)，x在next方向上也必存在第一个高度比它大的节点，设这个节点是z(z可能是最&#x2F;次大值节点)。因为y是last方向上第一个高度比它大的节点，所以x在last方向上没到达y之前遇到的所有山峰高度都小于x，这些山峰和x都不符合小找大。同时，y从last到达z这一段的每一个节点x都看不见。所以，从x出发只能找到(x,y)，(x,z)这两对。如果环中有i个节点，除去最大值和次大值，还剩i-2个节点，都以小找大方式，共有2*(i-2)对，还有一对就是次大值能看到最大值这一对，因此共是2i-3对。</p>
+<p>时间复杂度: O(1)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getVisibleNumNoRepeat</span><span class="hljs-params">(<span class="hljs-type">int</span>[] arr)</span> &#123;<br>        <span class="hljs-keyword">if</span> (arr == <span class="hljs-literal">null</span> || arr.length &lt;= <span class="hljs-number">1</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">2</span> * arr.length - <span class="hljs-number">3</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>进阶问题: 给定一个不含有负数但可能含有重复值的数组arr，返回有多少对山峰能够相互看见。</p>
+<h3 id="解法-单调栈"><a href="#解法-单调栈" class="headerlink" title="解法: 单调栈"></a>解法: 单调栈</h3><p>先设计一种数据结构，数据结构有两个属性，分别是代表山峰的高度和出现的次数。<br>接下来以同样的思想小找第一个大，这种想法想到使用单调栈来解决，同时解决的是左右最近且较大元素，考虑从栈顶到栈底递增的单调栈。<br>然后从数组中找到最大值(可能不止一个，随意一个)，从最大值开始遍历数组，对每个位置的元素以设计的数据结构形式添加进栈，首先将最大值元素以(最大值,1)入栈，然后从最大值后面开始遍历:</p>
+<ol>
+<li>若栈顶元素的val比当前元素大，直接把当前元素以(val,1) push进栈</li>
+<li>若栈顶元素的val和当前元素相等，直接把栈顶元素的times++</li>
+<li>若栈顶元素的val比当前元素小，直接push不满足单调性，需要pop元素。pop元素如果只出现1次，以小找大的方式，next方向能找到当前添加元素，last方向能找到下面一个元素，因为最大值在栈底，不存在下面元素为空的情况，所以必然为2对。如果pop元素出现了K次(K&gt;1)，那么代表这K个元素中间出现的都是比pop元素小的元素，如果有大的，就将pop元素早pop出去。中间小的元素和pop元素构不成小找大，所以pop元素的K个每个都可以和两边大元素构成山峰对，next方向大的就是当前元素，last方向大的就是栈内下边那个元素，所以有2*K个，再加上内部之间也可以两两构成，即C(2,K)，因此当K&gt;&#x3D;2时，为2*K+C(2,K)个山峰对。</li>
+</ol>
+<p>最终遍历完，要处理栈内剩余的值，分三种来讨论:</p>
+<ol>
+<li>栈内剩余元素数量超过2个，那么除了栈底和栈底上一个元素的每一个元素，设其times为K，如果K&#x3D;1，那么代表只有两对，last是栈内下一个元素，next是栈内上一个元素，即使此元素是栈顶元素，因为是一个环，所以还有栈底的最大值作为next的大于其的元素。如果K&gt;1，那么和上面情况类似，有2*K+C(2,K)个山峰对。</li>
+<li>栈内剩余元素为2个时，此时对栈顶元素处理时，要看栈底元素的times。如果栈底元素的times是1，代表栈顶元素的next和last都是1个山峰，栈顶元素只能和最大值凑成1对，设栈顶元素times为K，如果K&#x3D;1，则最后结果就是1，如果K&gt;1，就是K+C(2,K)。如果栈底元素times&gt;1，则代表栈顶元素的next和last不是同一个山峰(这两个山峰都是最大值，但不是同一个)，如果K&#x3D;1，就会有2个山峰对，如果K&gt;1，就会有2*K+C(2,K)个山峰对。</li>
+<li>栈内还剩余元素为1时，因为是最大值，不存在小找大，只能是内部互相组成山峰对。如果K&#x3D;1，那么没有山峰对，如果K&gt;1，为C(2,K)</li>
+</ol>
+<p>时间复杂度: O(N)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Record</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> val;<br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> times;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">Record</span><span class="hljs-params">(<span class="hljs-type">int</span> val)</span> &#123;<br>        <span class="hljs-built_in">this</span>.val = val;<br>        <span class="hljs-built_in">this</span>.times = <span class="hljs-number">1</span>;<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getVisibleNum</span><span class="hljs-params">(<span class="hljs-type">int</span>[] arr)</span> &#123;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">size</span> <span class="hljs-operator">=</span> arr.length;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">maxIndex</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-comment">// 找寻最大值</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; size; i++) &#123;<br>            maxIndex = arr[maxIndex] &lt; arr[i] ? i : maxIndex;<br>        &#125;<br>        Stack&lt;Record&gt; stack = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Stack</span>&lt;&gt;();<br>        <span class="hljs-comment">// 把(最大值,1)入栈</span><br>        stack.push(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Record</span>(arr[maxIndex]));<br>        <span class="hljs-comment">// 开始遍历</span><br>        <span class="hljs-type">int</span> <span class="hljs-variable">index</span> <span class="hljs-operator">=</span> nextIndex(maxIndex, size);<br>        <span class="hljs-comment">// 当再次回到maxIndex，说明遍历结束</span><br>        <span class="hljs-keyword">while</span> (index != maxIndex) &#123;<br>            <span class="hljs-comment">// 当前元素大于栈顶元素情况</span><br>            <span class="hljs-keyword">while</span> (stack.peek().val &lt; arr[index]) &#123;<br>                <span class="hljs-type">int</span> <span class="hljs-variable">k</span> <span class="hljs-operator">=</span> stack.pop().times;<br>                <span class="hljs-comment">// 弹出记录为(X,K), 如果K==1，产生2对，如果K&gt;1，产生2*K+C(2,K)对</span><br>                res += getInternalSum(k) + <span class="hljs-number">2</span> * k;<br>            &#125;<br>            <span class="hljs-comment">// 当前元素等于栈顶元素情况</span><br>            <span class="hljs-keyword">if</span> (stacl.peek().val == arr[index]) &#123;<br>                stack.peek().times++;<br>            &#125; <span class="hljs-keyword">else</span> &#123; <span class="hljs-comment">// 当前元素小于栈顶元素情况</span><br>                stack.push(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Record</span>(arr[index]));<br>            &#125;<br>            index = nextIndex(index, size);<br>        &#125;<br>        <span class="hljs-comment">// 处理栈内剩余值</span><br>        <span class="hljs-comment">// 栈内元素数量大于2时</span><br>        <span class="hljs-keyword">while</span> (stack.size() &gt; <span class="hljs-number">2</span>) &#123;<br>            <span class="hljs-type">int</span> <span class="hljs-variable">times</span> <span class="hljs-operator">=</span> stack.pop().times;<br>            res += getInternalSum(k) + <span class="hljs-number">2</span> * times;<br>        &#125;<br>        <span class="hljs-comment">// 栈内元素数量等于2时</span><br>        <span class="hljs-keyword">if</span> (stack.size() == <span class="hljs-number">2</span>) &#123;<br>            <span class="hljs-type">int</span> <span class="hljs-variable">times</span> <span class="hljs-operator">=</span> stack.pop().times();<br>            res += getInternalSum(times) + (stack.peek().times == <span class="hljs-number">1</span> ? times : <span class="hljs-number">2</span> * times);<br>        &#125;<br>        <span class="hljs-comment">// 最终必然剩下最大值，即stack元素数量为1</span><br>        res += getInternalSum(stack.pop().times);<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">nextIndex</span><span class="hljs-params">(<span class="hljs-type">int</span> i, <span class="hljs-type">int</span> size)</span> &#123;<br>        <span class="hljs-keyword">return</span> i &lt; (size - <span class="hljs-number">1</span>) ? (i + <span class="hljs-number">1</span>) : <span class="hljs-number">0</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getInternalSum</span><span class="hljs-params">(<span class="hljs-type">int</span> k)</span> &#123;<br>        <span class="hljs-keyword">return</span> k == <span class="hljs-number">1</span> ? <span class="hljs-number">0</span> : (k * (k - <span class="hljs-number">1</span>)) / <span class="hljs-number">2</span>;<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9D%A2%E8%AF%95%E6%8C%87%E5%8D%97%E7%B3%BB%E5%88%97/" class="category-chain-item">代码面试指南系列</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">#数据结构</a>
+      
+        <a href="/tags/%E7%AE%97%E6%B3%95/">#算法</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>代码面试指南系列（八）：可见的山峰对数量</div>
+      <div>http://example.com/2020/02/10/D-DataStructureAndAlgorithm/E-ZuoInterview/08-getVisibleNum/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>ChenXi</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2020年2月10日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/02/10/D-DataStructureAndAlgorithm/E-ZuoInterview/07-getNum/" title="代码面试指南系列（七）：最大值减去最小值小于或等于num的子数组数量">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">代码面试指南系列（七）：最大值减去最小值小于或等于num的子数组数量</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/02/09/D-DataStructureAndAlgorithm/E-ZuoInterview/01-Reverse-Stack/" title="代码面试指南系列（一）：如何仅用递归函数和栈操作逆序一个栈">
+                        <span class="hidden-mobile">代码面试指南系列（一）：如何仅用递归函数和栈操作逆序一个栈</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

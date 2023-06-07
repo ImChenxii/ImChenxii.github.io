@@ -1,0 +1,664 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ChenXi">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="题目描述:输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。要求不能创建任何新的结点，只能调整树中结点指针的指向。 解法一：非递归解法二叉树中每个节点都有一个left指针指向左节点，一个right指针指向右节点，双向链表中每个节点都有一个prev指针指向前驱节点，一个next指针指向后继节点，在二叉搜索树中，左节点小于父节点，右节点大于父节点，在排序双向链表中，前驱节点小于当前节点，后继">
+<meta property="og:type" content="article">
+<meta property="og:title" content="剑指Offer题解系列（二十六）：二叉搜索树与双向链表">
+<meta property="og:url" content="http://example.com/2019/01/02/D-DataStructureAndAlgorithm/C-JianzhiOffer/26-Convert/index.html">
+<meta property="og:site_name" content="陈曦の博客">
+<meta property="og:description" content="题目描述:输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。要求不能创建任何新的结点，只能调整树中结点指针的指向。 解法一：非递归解法二叉树中每个节点都有一个left指针指向左节点，一个right指针指向右节点，双向链表中每个节点都有一个prev指针指向前驱节点，一个next指针指向后继节点，在二叉搜索树中，左节点小于父节点，右节点大于父节点，在排序双向链表中，前驱节点小于当前节点，后继">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-01-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-07T00:28:32.723Z">
+<meta property="article:author" content="ChenXi">
+<meta property="article:tag" content="剑指Offer">
+<meta property="article:tag" content="数据结构">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>剑指Offer题解系列（二十六）：二叉搜索树与双向链表 - 陈曦の博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>陈曦の博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="剑指Offer题解系列（二十六）：二叉搜索树与双向链表"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-01-02 00:00" pubdate>
+          2019年1月2日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          26 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">剑指Offer题解系列（二十六）：二叉搜索树与双向链表</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述:"></a>题目描述:</h3><p>输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。要求不能创建任何新的结点，只能调整树中结点指针的指向。</p>
+<h3 id="解法一：非递归解法"><a href="#解法一：非递归解法" class="headerlink" title="解法一：非递归解法"></a>解法一：非递归解法</h3><p>二叉树中每个节点都有一个left指针指向左节点，一个right指针指向右节点，双向链表中每个节点都有一个prev指针指向前驱节点，一个next指针指向后继节点，在二叉搜索树中，左节点小于父节点，右节点大于父节点，在排序双向链表中，前驱节点小于当前节点，后继节点大于当前节点。<br>因为二分搜索树的中序遍历的结果就是从小到大的有序排列，那么只需要在中序遍历时到一个遍历节点的时候先将这个节点保存起来，然后遍历下一个节点的时候将之前保存的节点的right域指向下一个结点，下一个结点的left域指向上一个结点。这样一来就形成了一个排序的双向链表。然后将之前指向保存的指针指向当前这个结点。</p>
+<p>时间复杂度: O(N), N为结点个数；辅助空间复杂度O(N)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment">public class TreeNode &#123;</span><br><span class="hljs-comment">    int val = 0;</span><br><span class="hljs-comment">    TreeNode left = null;</span><br><span class="hljs-comment">    TreeNode right = null;</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">    public TreeNode(int val) &#123;</span><br><span class="hljs-comment">        this.val = val;</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">    &#125;</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">&#125;</span><br><span class="hljs-comment">*/</span><br><span class="hljs-keyword">import</span> java.util.Stack;<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>    <span class="hljs-keyword">public</span> TreeNode <span class="hljs-title function_">Convert</span><span class="hljs-params">(TreeNode pRootOfTree)</span> &#123;<br>        <span class="hljs-keyword">if</span> (pRootOfTree == <span class="hljs-literal">null</span>)<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>        Stack&lt;TreeNode&gt; stack = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Stack</span>&lt;&gt;();<br>        <span class="hljs-type">TreeNode</span> <span class="hljs-variable">p</span> <span class="hljs-operator">=</span> pRootOfTree;<br>        <span class="hljs-comment">// pre用于保存中序遍历序列的上一节点</span><br>        <span class="hljs-type">TreeNode</span> <span class="hljs-variable">pre</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>        <span class="hljs-type">boolean</span> <span class="hljs-variable">isFirst</span> <span class="hljs-operator">=</span> <span class="hljs-literal">true</span>;<br>        <span class="hljs-keyword">while</span>(p != <span class="hljs-literal">null</span> || !stack.empty()) &#123;<br>            <span class="hljs-keyword">while</span>(p != <span class="hljs-literal">null</span>) &#123;<br>                stack.push(p);<br>                p = p.left;<br>            &#125;<br>            p = stack.pop();<br>            <span class="hljs-comment">// isFirst代表是树中最小的结点，将此结点赋给链表头部root</span><br>            <span class="hljs-keyword">if</span> (isFirst) &#123;<br>                pRootOfTree = p;<br>                pre = pRootOfTree;<br>                isFirst = <span class="hljs-literal">false</span>;<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                <span class="hljs-comment">// 前一结点的right(next)指向下一结点</span><br>                pre.right = p;<br>                <span class="hljs-comment">// 当前结点的left(prev)指向前一个结点</span><br>                p.left = pre;<br>                <span class="hljs-comment">// 当前结点变为前一结点</span><br>                pre = p;<br>            &#125;<br>            p = p.right;<br>        &#125;<br>        <span class="hljs-keyword">return</span> pRootOfTree;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="解法二-递归法"><a href="#解法二-递归法" class="headerlink" title="解法二: 递归法"></a>解法二: 递归法</h3><p>仍然主体思想是中序遍历，并且在遍历时拼接当前结点和左右子树。</p>
+<p>时间复杂度: O(N), N为结点个数; 辅助空间复杂度: O(1)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment">public class TreeNode &#123;</span><br><span class="hljs-comment">    int val = 0;</span><br><span class="hljs-comment">    TreeNode left = null;</span><br><span class="hljs-comment">    TreeNode right = null;</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">    public TreeNode(int val) &#123;</span><br><span class="hljs-comment">        this.val = val;</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">    &#125;</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">&#125;</span><br><span class="hljs-comment">*/</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>    <span class="hljs-keyword">public</span> TreeNode <span class="hljs-title function_">Convert</span><span class="hljs-params">(TreeNode pRootOfTree)</span> &#123;<br>        <span class="hljs-keyword">if</span> (pRootOfTree == <span class="hljs-literal">null</span>)<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>        <span class="hljs-keyword">if</span> (pRootOfTree.left == <span class="hljs-literal">null</span> &amp;&amp; pRootOfTree.right == <span class="hljs-literal">null</span>)<br>            <span class="hljs-keyword">return</span> pRootOfTree;<br>        <span class="hljs-comment">// 1.将左子树构造成双链表, 并返回链表头结点赋给left</span><br>        <span class="hljs-type">TreeNode</span> <span class="hljs-variable">left</span> <span class="hljs-operator">=</span> Convert(pRootOfTree.left);<br>        <span class="hljs-type">TreeNode</span> <span class="hljs-variable">p</span> <span class="hljs-operator">=</span> left;<br>        <span class="hljs-comment">// 2.将p定位至左子树双链表最后一个节点</span><br>        <span class="hljs-keyword">while</span> (p != <span class="hljs-literal">null</span> &amp;&amp; p.right != <span class="hljs-literal">null</span>) &#123;<br>            p = p.right;<br>        &#125;<br>        <span class="hljs-comment">// 3.如果左子树链表不为空的话, 将当前结点追加到左子树链表结尾p后面</span><br>        <span class="hljs-keyword">if</span> (left != <span class="hljs-literal">null</span>) &#123;<br>            <span class="hljs-comment">// 追加到p后面，即p.next = pRootOfTree</span><br>            p.right = pRootOfTree;<br>            <span class="hljs-comment">// 反向指向p, 即pRootOfTree.prev = p</span><br>            pRootOfTree.left = p;<br>        &#125;<br>        <span class="hljs-comment">// 4.将右子树构造成双链表, 并返回链表头节点</span><br>        <span class="hljs-type">TreeNode</span> <span class="hljs-variable">right</span> <span class="hljs-operator">=</span> Convert(pRootOfTree.right);<br>        <span class="hljs-comment">// 5.如果右子树链表不为空的话, 将该链表追加到当前节点之后，从而借助当前结点就把左右子树链表拼接起来了</span><br>        <span class="hljs-keyword">if</span> (right != <span class="hljs-literal">null</span>) &#123;<br>            right.left = pRootOfTree;<br>            pRootOfTree.right = right;<br>        &#125;<br>        <span class="hljs-keyword">return</span> left != <span class="hljs-literal">null</span> ? left : pRootOfTree;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="解法三-递归改进"><a href="#解法三-递归改进" class="headerlink" title="解法三: 递归改进"></a>解法三: 递归改进</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment">public class TreeNode &#123;</span><br><span class="hljs-comment">    int val = 0;</span><br><span class="hljs-comment">    TreeNode left = null;</span><br><span class="hljs-comment">    TreeNode right = null;</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">    public TreeNode(int val) &#123;</span><br><span class="hljs-comment">        this.val = val;</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">    &#125;</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">&#125;</span><br><span class="hljs-comment">public class Solution &#123;</span><br><span class="hljs-comment">    protected TreeNode leftLast = null;</span><br><span class="hljs-comment">    public TreeNode Convert(TreeNode pRootOfTree) &#123;</span><br><span class="hljs-comment">        if (pRootOfTree == null)</span><br><span class="hljs-comment">            return null;</span><br><span class="hljs-comment">        if (pRootOfTree.left == null &amp;&amp; pRootOfTree.right == null) &#123;</span><br><span class="hljs-comment">            // 找一个全局变量来存储左子树的最后一个结点</span><br><span class="hljs-comment">            leftLast = pRootOfTree;</span><br><span class="hljs-comment">            return pRootOfTree;</span><br><span class="hljs-comment">        &#125;</span><br><span class="hljs-comment">        // 1.将左子树构造成双链表，并返回链表头节点</span><br><span class="hljs-comment">        TreeNode left = Convert(pRootOfTree.left);</span><br><span class="hljs-comment">        // 3.如果左子树链表不为空的话，将当前结点追加到左子树链表</span><br><span class="hljs-comment">        if(left!=null)&#123;</span><br><span class="hljs-comment">            leftLast.right = pRootOfTree;</span><br><span class="hljs-comment">            pRootOfTree = leftLast;</span><br><span class="hljs-comment">        &#125;</span><br><span class="hljs-comment">        // 当根节点只含左子树时，则该根节点为最后一个节点</span><br><span class="hljs-comment">        leftLast = pRootOfTree;</span><br><span class="hljs-comment">        // 4.将右子树构造成双链表，并返回链表头节点</span><br><span class="hljs-comment">        TreeNode right = Convert(pRootOfTree.right);</span><br><span class="hljs-comment">        // 5.如果右子树链表不为空的话，将该链表追加到当前节点之后</span><br><span class="hljs-comment">        if(right!=null)&#123;</span><br><span class="hljs-comment">            right.left = pRootOfTree;</span><br><span class="hljs-comment">            pRootOfTree.right = right;</span><br><span class="hljs-comment">        &#125;</span><br><span class="hljs-comment">        return left != null ? left : pRootOfTree;</span><br><span class="hljs-comment">    &#125;</span><br><span class="hljs-comment">&#125;</span><br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%89%91%E6%8C%87Offer%E9%A2%98%E7%9B%AE%E8%AF%A6%E8%A7%A3/" class="category-chain-item">剑指Offer题目详解</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%89%91%E6%8C%87Offer/">#剑指Offer</a>
+      
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">#数据结构</a>
+      
+        <a href="/tags/%E7%AE%97%E6%B3%95/">#算法</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>剑指Offer题解系列（二十六）：二叉搜索树与双向链表</div>
+      <div>http://example.com/2019/01/02/D-DataStructureAndAlgorithm/C-JianzhiOffer/26-Convert/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>ChenXi</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年1月2日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/01/03/D-DataStructureAndAlgorithm/C-JianzhiOffer/27-Permutation/" title="剑指Offer题解系列（二十七）：字符串的排列">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">剑指Offer题解系列（二十七）：字符串的排列</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/01/01/D-DataStructureAndAlgorithm/C-JianzhiOffer/25-Clone/" title="剑指Offer题解系列（二十五）：复杂链表的复制">
+                        <span class="hidden-mobile">剑指Offer题解系列（二十五）：复杂链表的复制</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

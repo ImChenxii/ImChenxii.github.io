@@ -1,0 +1,684 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ChenXi">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="题目描述:给定数组arr，返回arr的最长递增子序列。例如: arr&#x3D;[2,1,5,3,6,4,8,9,7]，最长递增子序列为[1,3,4,8,9] 解法一: 生成一个长度为N的数组dp，dp[i]表示在以arr[i]这个数结尾的情况下，arr[0…i]中的最大递增子序列长度。 对于arr[0]来说，令dp[0]&#x3D;1，接下来从左到右依次算出每个位置的数结尾的情况下，最长递增子序">
+<meta property="og:type" content="article">
+<meta property="og:title" content="代码面试指南系列（四十九）：最长递增子序列">
+<meta property="og:url" content="http://example.com/2020/02/18/D-DataStructureAndAlgorithm/E-ZuoInterview/49-getDp/index.html">
+<meta property="og:site_name" content="陈曦の博客">
+<meta property="og:description" content="题目描述:给定数组arr，返回arr的最长递增子序列。例如: arr&#x3D;[2,1,5,3,6,4,8,9,7]，最长递增子序列为[1,3,4,8,9] 解法一: 生成一个长度为N的数组dp，dp[i]表示在以arr[i]这个数结尾的情况下，arr[0…i]中的最大递增子序列长度。 对于arr[0]来说，令dp[0]&#x3D;1，接下来从左到右依次算出每个位置的数结尾的情况下，最长递增子序">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-02-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-07T00:28:32.743Z">
+<meta property="article:author" content="ChenXi">
+<meta property="article:tag" content="数据结构">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>代码面试指南系列（四十九）：最长递增子序列 - 陈曦の博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>陈曦の博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="代码面试指南系列（四十九）：最长递增子序列"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2020-02-18 00:00" pubdate>
+          2020年2月18日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          40 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">代码面试指南系列（四十九）：最长递增子序列</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述:"></a>题目描述:</h3><p>给定数组arr，返回arr的最长递增子序列。<br>例如: arr&#x3D;[2,1,5,3,6,4,8,9,7]，最长递增子序列为[1,3,4,8,9]</p>
+<h4 id="解法一"><a href="#解法一" class="headerlink" title="解法一:"></a>解法一:</h4><ol>
+<li>生成一个长度为N的数组dp，dp[i]表示在以arr[i]这个数结尾的情况下，arr[0…i]中的最大递增子序列长度。</li>
+<li>对于arr[0]来说，令dp[0]&#x3D;1，接下来从左到右依次算出每个位置的数结尾的情况下，最长递增子序列长度。</li>
+<li>假设计算到位置i，求以arr[i]结尾情况下的最长递增子序列长度，即dp[i]。如果最长递增子序列以arr[i]结尾，那么在arr[0…i-1]中所有比arr[i]小的数都可以作为倒数第二个数。在这些中选择以哪个数结尾递增子序列最大的那个数作为倒数第二个数，所以dp[i]&#x3D;max{dp[j]+1(0&lt;&#x3D;j&lt;i,arr[j]&lt;arr[i])}。如果arr[0…i-1]中所有的数都不比arr[i]小，令dp[i]等于1，说明递增子序列只包含arr[i]。</li>
+</ol>
+<p>得到dp数组的结果后，得到了每个位置作为最后一个数字的最大子序列长度，现在要根据dp数组得到子序列。<br>根据题目中arr，可得dp数组为dp&#x3D;[1,1,2,2,3,3,4,5,4]，接下来：</p>
+<ol>
+<li>找到dp数组中的最大值及其位置，说明应该以这个位置的数字作为最长子序列尾部数字。例如，在例子中就是dp[7]&#x3D;5，对应arr[7]&#x3D;9。</li>
+<li>从arr数组的7位置开始从右向左遍历。如果对于某一个位置i，既有arr[i]&lt;arr[7]，又有dp[i]&#x3D;dp[7]-1，说明arr[i]可以作为最长递增子序列的倒数第二个数。例子中，arr[6]&lt;arr[7]，并且dp[6]&#x3D;dp[7]-1，所以arr[6]&#x3D;8应该作为最长递增子序列的倒数第二个数字。</li>
+<li>从arr数组的位置6开始继续向左遍历，按照同样方式找到倒数第三个数。但在例子中发现，位置5和位置4都满足这个条件，说明以这两个位置作为倒数第三个数都可以。</li>
+<li>重复这个过程，直到所有的数字都找出来。</li>
+</ol>
+<p>时间复杂度: O(N^2)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span>[] getdp1(<span class="hljs-type">int</span>[] arr) &#123;<br>        <span class="hljs-type">int</span>[] dp = <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[arr.length];<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; arr.length; i++) &#123;<br>            dp[i] = <span class="hljs-number">1</span>;<br>            <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">j</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; j &lt; i; j++) &#123;<br>                <span class="hljs-keyword">if</span> (arr[i] &gt; arr[j]) &#123;<br>                    dp[i] = Math.max(dp[j] + <span class="hljs-number">1</span>, dp[i]);<br>                &#125;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> dp;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span>[] generateLIS(<span class="hljs-type">int</span>[] arr, <span class="hljs-type">int</span>[] dp) &#123;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">len</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">index</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-comment">// 找到最长位置索引</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; dp.length; i++) &#123;<br>            <span class="hljs-keyword">if</span> (dp[i] &gt; len) &#123;<br>                len = dp[i];<br>                index = i;<br>            &#125;<br>        &#125;<br>        <span class="hljs-type">int</span>[] lis = <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[len];<br>        <span class="hljs-comment">// 先填充末尾元素</span><br>        lis[--len] = arr[index];<br>        <span class="hljs-comment">// i是遍历arr的当前位置，index是上一个数字的位置</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> index; i &gt;= <span class="hljs-number">0</span>; i--) &#123;<br>            <span class="hljs-keyword">if</span> (arr[i] &lt; arr[index] &amp;&amp; dp[i] == dp[index] - <span class="hljs-number">1</span>) &#123;<br>                lis[--len] = arr[i];<br>                index = i;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> lis;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span>[] list1(<span class="hljs-type">int</span>[] arr) &#123;<br>        <span class="hljs-keyword">if</span> (arr == <span class="hljs-literal">null</span> || arr.length == <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>        &#125;<br>        <span class="hljs-type">int</span>[] dp = getdp1(arr);<br>        <span class="hljs-keyword">return</span> generateLIS(arr, dp);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="解法二-二分查找优化dp"><a href="#解法二-二分查找优化dp" class="headerlink" title="解法二: 二分查找优化dp"></a>解法二: 二分查找优化dp</h4><p>在解法一中求解dp数组时间复杂度是O(N^2)，生成最长递增子序列时间复杂度是O(N)，所以优化在生成dp数组优化。<br>先生成一个长度为N的数组ends，初始时ends[0]&#x3D;arr[0]，其余位置为0。再生成一个变量right，初始时right&#x3D;0。<br>然后开始遍历arr数组，ends[0…right]为有效区，ends[right+1…N-1]为无效区。对于有效区上位置b，如果有ends[b]&#x3D;&#x3D;c，则表示遍历到目前位置，在所有b+1长度的递增序列中，最小的结尾数是c。无效区的位置则没有意义。如: arr[2,1,5,3,6,5,8,9,7]，初始时dp[0]&#x3D;1，ends[0]&#x3D;2，right&#x3D;0。end[0…0]为有效区，ends[0]&#x3D;2的含义是：在遍历过arr[0]后，在所有长度为1的递增序列中，最小的结尾数是2。之后继续遍历:</p>
+<ol>
+<li>遍历到arr[1]&#x3D;&#x3D;1，此时ends有效区为arr[0…right]&#x3D;[2]，在有效区找到最左边大于或者等于arr[1]的数字，发现是ends[0]，表示以arr[1]结尾的最长递增序列只有arr[1]，所以令dp[1]&#x3D;1，然后令ends[0]&#x3D;arr[1]，因为到目前遍历为止，在所有长度为1的递增序列中，最小的结尾数是1，不再是2。</li>
+<li>遍历到arr[2]&#x3D;&#x3D;5，此时ends有效区为arr[0…0]&#x3D;[1]，在有效区找到最左边大于或者等于arr[2]的数字，发现没有这个数，表示以arr[2]结尾的最长递增序列长度&#x3D;ends有效区长度+1，所以令dp[2]&#x3D;2。ends整个有效区都没有比arr[2]更大的数字，说明发现了比ends有效区更长的递增序列，于是把有效区扩大，ends有效区&#x3D;ends[0…1]&#x3D;[1,5]，即right++。</li>
+<li>遍历到arr[3]&#x3D;&#x3D;3，此时ends有效区为[1,5]，在有效区中用二分法找到最左边大于或等于arr[3]的数字，发现是ends[1]，表示以arr[3]结尾的最长递增序列长度为2，所以令dp[3]&#x3D;2，然后令ends[1]&#x3D;3，因为遍历到目前为止，在所有长度为2的递增序列中，最小的结尾数是3，不是5。</li>
+<li>遍历到arr[4]&#x3D;&#x3D;6，此时ends有效区为[1,3]，在有效区中用二分法找到最左边大于或等于arr[4]的数字，发现没有这样的数字，表示以arr[4]尾的最长递增序列长度&#x3D;ends有效区长度+1，所以令dp[4]&#x3D;3。ends整个有效区都没有比arr[4]更大的数字，说明发现了比ends有效区更长的递增序列，于是把有效区扩大，ends有效区&#x3D;ends[0…2]&#x3D;[1,3,6]。</li>
+<li>遍历到arr[5]&#x3D;&#x3D;4，此时ends有效区为[1,3,6]，在有效区中用二分法找到最左边大于或等于arr[5]的数字，发现是ends[2]，表示以arr[5]结尾的最长递增序列长度为3，所以令dp[5]&#x3D;3。并令ends[2]&#x3D;4，表示在所有长度为3的递增子序列中，最小的尾数是4。</li>
+<li>遍历到arr[6]&#x3D;&#x3D;8，此时ends有效区为[1,3,4]，在有效区中用二分法找到最左边大于或等于arr[6]的数字，发现没有这样的数字，表示以arr[6]尾的最长递增序列长度&#x3D;ends有效区长度+1，所以令dp[6]&#x3D;4。ends整个有效区都没有比arr[6]更大的数字，说明发现了比ends有效区更长的递增序列，于是把有效区扩大，ends有效区&#x3D;ends[0…3]&#x3D;[1,3,4,8]。</li>
+<li>遍历到arr[7]&#x3D;&#x3D;9，此时ends有效区为[1,3,4,8]，在有效区中用二分法找到最左边大于或等于arr[7]的数字，现没有这样的数字，表示以arr[7]尾的最长递增序列长度&#x3D;ends有效区长度+1，所以令dp[7]&#x3D;5。ends整个有效区都没有比arr[7]更大的数字，说明发现了比ends有效区更长的递增序列，于是把有效区扩大，ends有效区&#x3D;ends[0…4]&#x3D;[1,3,4,8,9]。</li>
+<li>遍历到arr[8]&#x3D;&#x3D;7，此时ends有效区为[1,3,4,8,9]，在有效区中用二分法找到最左边大于或等于arr[8]的数字，发现是ends[3]&#x3D;8，表示以arr[8]为结尾最长递增子序列长度为4，所以令dp[8]&#x3D;4。然后令ends[3]&#x3D;7，表示在所有长度为4的递增序列中，最小的结尾数为7。</li>
+</ol>
+<p>总结:<br>整体遍历过程是在arr数组上进行的，当前遍历arr元素在有效区中找到一个合适的位置，有以下几种情况：</p>
+<ol>
+<li>如果元素比有效区所有元素都大，说明可以以当前元素作为结尾，扩大最长子序列，此时扩大有效区，令有效区增大当前元素到末尾，并且当前元素对应的dp数组也应该是当前扩大后的有效区长度</li>
+<li>如果元素比有效区所有元素都小，找到左边第一个大于它的就是ends有效区头部，代表以当前元素为结尾，最长序列就是1，并更新ends有效区首部为此元素，便于后面凑成更长的子序列</li>
+<li>如果元素在中间位置，能找到一个比它大的元素，说明有效区长度就是前面几个小的加上自身，并且更新比它大的第一个元素，代表当前长度最长子序列的末尾有更小的可以替换，便于后面构成更长的子序列</li>
+</ol>
+<p>时间复杂度: O(NlogN)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span>[] getdp(<span class="hljs-type">int</span>[] arr) &#123;<br>        <span class="hljs-type">int</span>[] dp = <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[arr.length];<br>        <span class="hljs-type">int</span>[] ends = <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[arr.length];<br>        <span class="hljs-comment">// 初始化</span><br>        ends[<span class="hljs-number">0</span>] = arr[<span class="hljs-number">0</span>];<br>        dp[<span class="hljs-number">0</span>] = <span class="hljs-number">1</span>;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">right</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">l</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">r</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">m</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-comment">// 遍历arr数组</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span>; i &lt; arr.length; i++) &#123;<br>            l = <span class="hljs-number">0</span>;<br>            r = right;<br>            <span class="hljs-comment">// 二分查找</span><br>            <span class="hljs-keyword">while</span> (l &lt;= r) &#123;<br>                m = (l + r) / <span class="hljs-number">2</span>;<br>                <span class="hljs-keyword">if</span> (arr[i] &gt; ends[m]) &#123;<br>                    l = m + <span class="hljs-number">1</span>;<br>                &#125; <span class="hljs-keyword">else</span> &#123;<br>                    r = m - <span class="hljs-number">1</span>;<br>                &#125;<br>            &#125;<br>            right = Math.max(right, <span class="hljs-number">1</span>);<br>            <span class="hljs-comment">// 更新或者添加元素</span><br>            ends[l] = arr[i];<br>            dp[i] = l + <span class="hljs-number">1</span>;<br>        &#125;<br>        <span class="hljs-keyword">return</span> dp;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span>[] list(<span class="hljs-type">int</span> arr[]) &#123;<br>        <span class="hljs-keyword">if</span> (arr == <span class="hljs-literal">null</span> || arr.length == <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>        &#125;<br>        <span class="hljs-type">int</span>[] dp = getdp(arr);<br>        <span class="hljs-keyword">return</span> generateLIS(arr, dp);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%A3%E7%A0%81%E9%9D%A2%E8%AF%95%E6%8C%87%E5%8D%97%E7%B3%BB%E5%88%97/" class="category-chain-item">代码面试指南系列</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">#数据结构</a>
+      
+        <a href="/tags/%E7%AE%97%E6%B3%95/">#算法</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>代码面试指南系列（四十九）：最长递增子序列</div>
+      <div>http://example.com/2020/02/18/D-DataStructureAndAlgorithm/E-ZuoInterview/49-getDp/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>ChenXi</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2020年2月18日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/02/18/D-DataStructureAndAlgorithm/E-ZuoInterview/48-maxBalloon/" title="代码面试指南系列（四十八）：打气球的最大分数">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">代码面试指南系列（四十八）：打气球的最大分数</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/02/18/D-DataStructureAndAlgorithm/E-ZuoInterview/50-Envelope/" title="代码面试指南系列（五十）：信封嵌套问题">
+                        <span class="hidden-mobile">代码面试指南系列（五十）：信封嵌套问题</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
